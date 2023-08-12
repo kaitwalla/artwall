@@ -1,9 +1,9 @@
 <?php
 
-namespace kaitwalla\artwall\sources;
+namespace kaitwalla\artwalla\sources;
 
-use kaitwalla\artwall\dto\ArtCreateDTO;
-use kaitwalla\artwall\Source;
+use kaitwalla\artwalla\dto\ArtCreateDTO;
+use kaitwalla\artwalla\Source;
 
 class Pixabay extends Source
 {
@@ -22,6 +22,7 @@ class Pixabay extends Source
     {
         $this->artData = new ArtCreateDTO(
             title: '',
+            category: $this->rawData->tags,
             description: $this->rawData->tags,
             artist: $this->rawData->user,
             url: $this->rawData->largeImageURL,

@@ -1,8 +1,8 @@
 <?php
 
-namespace kaitwalla\artwall\dto;
+namespace kaitwalla\artwalla\dto;
 
-use kaitwalla\artwall\Art;
+use kaitwalla\artwalla\Art;
 
 class ArtFromDTO
 {
@@ -15,7 +15,9 @@ class ArtFromDTO
             url: $dto->url,
             artist: $dto->artist,
             source: $dto->source,
+            category: $dto->category,
             favorited: false,
+            disliked: false,
             sourceId: $dto->sourceId,
         );
     }

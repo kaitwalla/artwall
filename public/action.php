@@ -1,8 +1,8 @@
 <?php
 
 use Dotenv\Dotenv;
-use kaitwalla\artwall\ArtFactory;
-use kaitwalla\artwall\SourceFactory;
+use kaitwalla\artwalla\ArtFactory;
+use kaitwalla\artwalla\SourceFactory;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
@@ -26,8 +26,23 @@ if (isset($response['action'])) {
             }
             print json_encode(ArtFactory::load($response['id']));
             break;
-        case 'newArt':
+        case 'randomArt':
+            $art = ArtFactory::loadRandomArt();
+            if ($art === null) {
+                print json_encode(['error' => 'It broke']);
+            } else {
+                print json_encode($art);
+            }
+            break;
+        case 'randomNewArt':
             print json_encode(SourceFactory::getNewArt());
             break;
+        case 'favorite':
+            if (isset($response['id'])) {
+                ArtFactory::update($response['id'], ['favorited' => true]);
+                print json_encode(['success']);
+            } else {
+                print json_encode(['error' => 'No ID provided']);
+            }
     }
 }

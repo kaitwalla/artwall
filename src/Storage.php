@@ -1,8 +1,8 @@
 <?php
 
-namespace kaitwalla\artwall;
+namespace kaitwalla\artwalla;
 
-use kaitwalla\artwall\dto\ArtCreateDTO;
+use kaitwalla\artwalla\dto\ArtCreateDTO;
 
 class Storage
 {
@@ -12,7 +12,7 @@ class Storage
         $file = file_get_contents($art->url);
         $filename = $art->id . '.jpg';
         $path = 'images/' . $filename;
-        file_put_contents(__DIR__ . '/../' . $path, $file);
+        file_put_contents(__DIR__ . '/../public/' . $path, $file);
         $db = new Database();
     }
 }

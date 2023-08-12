@@ -1,8 +1,8 @@
 <?php
 
-namespace kaitwalla\artwall;
+namespace kaitwalla\artwalla;
 
-use kaitwalla\artwall\dto\ArtCreateDTO;
+use kaitwalla\artwalla\dto\ArtCreateDTO;
 
 abstract class Source
 {

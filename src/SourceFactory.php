@@ -1,10 +1,10 @@
 <?php
 
-namespace kaitwalla\artwall;
+namespace kaitwalla\artwalla;
 
-use kaitwalla\artwall\sources\Pexels;
-use kaitwalla\artwall\sources\Pixabay;
-use kaitwalla\artwall\sources\Unsplash;
+use kaitwalla\artwalla\sources\Pexels;
+use kaitwalla\artwalla\sources\Pixabay;
+use kaitwalla\artwalla\sources\Unsplash;
 
 class SourceFactory
 {
@@ -42,6 +42,9 @@ class SourceFactory
                 $context = stream_context_create($opts);
                 $data = json_decode(file_get_contents('https://api.pexels.com/v1/curated?orientation=portrait', false, $context));
                 foreach ($data->photos as $item) {
+                    if ($item->width > $item->height) {
+                        continue;
+                    }
                     if (!Database::sourceIdExists(Pexels::$sourceName, $item->id)) {
                         array_push($additions, new Pexels($item));
                     } else {

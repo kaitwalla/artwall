@@ -1,9 +1,9 @@
 <?php
 
-namespace kaitwalla\artwall\sources;
+namespace kaitwalla\artwalla\sources;
 
-use kaitwalla\artwall\dto\ArtCreateDTO;
-use kaitwalla\artwall\Source;
+use kaitwalla\artwalla\dto\ArtCreateDTO;
+use kaitwalla\artwalla\Source;
 
 class Pexels extends Source
 {
@@ -22,6 +22,7 @@ class Pexels extends Source
     {
         $this->artData = new ArtCreateDTO(
             title: '',
+            category: '',
             description: $this->rawData->alt,
             artist: $this->rawData->photographer,
             url: $this->rawData->src->original,

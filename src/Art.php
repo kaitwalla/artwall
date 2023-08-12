@@ -1,6 +1,6 @@
 <?php
 
-namespace kaitwalla\artwall;
+namespace kaitwalla\artwalla;
 
 class Art
 {
@@ -10,7 +10,9 @@ class Art
         public string $artist,
         public string $source,
         public string $url,
+        public string $category,
         public bool $favorited,
+        public bool $disliked,
         public string|int $sourceId,
         public int $id
     ) {

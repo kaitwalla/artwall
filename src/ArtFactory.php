@@ -1,19 +1,20 @@
 <?php
 
-namespace kaitwalla\artwall;
+namespace kaitwalla\artwalla;
 
-use kaitwalla\artwall\dto\ArtCreateDTO;
-use kaitwalla\artwall\dto\ArtFromDTO;
-use kaitwalla\artwall\dtos\ArtCreateDTO as DtosArtCreateDTO;
+use ArtPropertiesDTO;
+use kaitwalla\artwalla\dto\ArtCreateDTO;
+use kaitwalla\artwalla\dto\ArtFromDTO;
+use kaitwalla\artwalla\dtos\ArtCreateDTO as DtosArtCreateDTO;
 
 class ArtFactory
 {
-    public function __construct(Art $art)
+    public function __construct(ArtCreateDTO|ArtPropertiesDTO $art)
     {
         if ($art->id) {
             return $this->update($art);
         } else {
-            return $this->create(title: $art->title, description: $art->description, artist: $art->artist, source: $art->source, sourceId: $art->sourceId, url: $art->url);
+            return $this->create($art);
         }
     }
 
@@ -27,20 +28,20 @@ class ArtFactory
         return new Art(...$db);
     }
 
-    public static function loadRandomArt(): Art
+    public static function loadRandomArt(): Art | null
     {
         $db = Database::loadRandomArt();
-        if ($db === null) {
+        if ($db !== false) {
+            return new Art(...$db);
+        } else {
             return null;
         }
-
-        return new Art(...$db);
     }
 
-    public static function update(Art $art): Art
+    public static function update(ArtPropertiesDTO $props): void
     {
-        $art->id = Database::updateArt($art);
-        return $art;
+        $art = Database::updateArt($props);
+        //return $art;
     }
 
     public static function create(

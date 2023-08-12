@@ -1,11 +1,11 @@
 {
-    "name": "kaitwalla/artwall",
+    "name": "kaitwalla/artwalla",
     "description": "Art dsiaply",
     "type": "project",
     "license": "free",
     "autoload": {
         "psr-4": {
-            "kaitwalla\\artwall\\": "src/"
+            "kaitwalla\\artwalla\\": "src/"
         }
     },
     "authors": [

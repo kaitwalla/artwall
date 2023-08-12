@@ -1,6 +1,6 @@
 <?php
 
-namespace kaitwalla\artwall\dto;
+namespace kaitwalla\artwalla\dto;
 
 class ArtCreateDTO
 {
@@ -10,6 +10,7 @@ class ArtCreateDTO
         public string $artist,
         public string $source,
         public string $url,
+        public string $category,
         public string|int $sourceId,
     ) {
     }
