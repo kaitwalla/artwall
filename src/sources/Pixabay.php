@@ -2,7 +2,6 @@
 
 namespace kaitwalla\artwall\sources;
 
-use kaitwalla\artwall\Art;
 use kaitwalla\artwall\dto\ArtCreateDTO;
 use kaitwalla\artwall\Source;
 

@@ -24,10 +24,10 @@ if (isset($response['action'])) {
                 echo json_encode(['error' => 'No ID provided']);
                 exit;
             }
-            echo json_encode(ArtFactory::load($response['id']));
+            print json_encode(ArtFactory::load($response['id']));
             break;
         case 'newArt':
-            return json_encode(SourceFactory::getNewArt());
+            print json_encode(SourceFactory::getNewArt());
             break;
     }
 }

@@ -13,7 +13,7 @@ class ArtFactory
         if ($art->id) {
             return $this->update($art);
         } else {
-            return $this->create(title: $art->title, description: $art->description, artist: $art->artist, source: $art->source, url: $art->url);
+            return $this->create(title: $art->title, description: $art->description, artist: $art->artist, source: $art->source, sourceId: $art->sourceId, url: $art->url);
         }
     }
 
@@ -44,22 +44,8 @@ class ArtFactory
     }
 
     public static function create(
-        string $title,
-        string $description,
-        string $artist,
-        string $source,
-        string $sourceId,
-        string $url,
+        ArtCreateDTO $createDTO
     ): Art {
-
-        $createDTO = new ArtCreateDTO(
-            title: $title,
-            description: $description,
-            artist: $artist,
-            source: $source,
-            sourceId: $sourceId,
-            url: $url
-        );
         $id = Database::createArt($createDTO);
         $art = ArtFromDTO::create(dto: $createDTO, id: $id);
         Storage::storeArt($art);

@@ -17,7 +17,7 @@ class Unsplash extends Source
     protected function assignData(): void
     {
         $this->artData = new ArtCreateDTO(
-            title: $this->rawData->description || $this->rawData->alt_description,
+            title: ($this->rawData->description) ? $this->rawData->description : '',
             description: $this->rawData->alt_description,
             artist: $this->rawData->user->name,
             url: $this->rawData->urls->full,
