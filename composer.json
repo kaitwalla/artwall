@@ -1,0 +1,20 @@
+{
+    "name": "kaitwalla/artwall",
+    "description": "Art dsiaply",
+    "type": "project",
+    "license": "free",
+    "autoload": {
+        "psr-4": {
+            "kaitwalla\\artwall\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "kaitwalla",
+            "email": "git@kait.email"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.5"
+    }
+}
