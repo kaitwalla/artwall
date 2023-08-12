@@ -5,7 +5,7 @@ import "../scss/main.scss";
 
 class Main {
   currentArt: Art;
-  currentType: ArtType = ArtType.Cached;
+  currentType: ArtType = ArtType.Random;
   constructor() {
     setInterval(() => {
       this.getNewArt();

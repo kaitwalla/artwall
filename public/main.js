@@ -135,7 +135,7 @@
     var Main = /** @class */ (function () {
         function Main() {
             var _this = this;
-            this.currentType = ArtType.Cached;
+            this.currentType = ArtType.Random;
             this.getNewArt = function () {
                 Api.getArt(_this.currentType).then(function (art) {
                     var _a;
