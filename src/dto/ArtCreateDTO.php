@@ -1,8 +1,8 @@
 <?php
 
-namespace kaitwalla\artwall;
+namespace kaitwalla\artwall\dto;
 
-class Art
+class ArtCreateDTO
 {
     public function __construct(
         public string $title,
@@ -10,9 +10,7 @@ class Art
         public string $artist,
         public string $source,
         public string $url,
-        public bool $favorited,
         public string|int $sourceId,
-        public int $id
     ) {
     }
 }

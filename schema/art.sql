@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS art (
     artist VARCHAR(200) NOT NULL,
     description VARCHAR(200) NOT NULL,
     source VARCHAR(200) NOT NULL,
+    sourceId VARCHAR(200) NOT NULL,
     url VARCHAR(200) NOT NULL,
     favorite BOOLEAN NOT NULL DEFAULT 0
 );

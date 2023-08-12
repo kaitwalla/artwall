@@ -2,6 +2,10 @@
 
 namespace kaitwalla\artwall;
 
+use kaitwalla\artwall\dto\ArtCreateDTO;
+use kaitwalla\artwall\dto\ArtFromDTO;
+use kaitwalla\artwall\dtos\ArtCreateDTO as DtosArtCreateDTO;
+
 class ArtFactory
 {
     public function __construct(Art $art)
@@ -20,15 +24,17 @@ class ArtFactory
             return null;
         }
 
-        $art = new Art();
-        $art->id = $db['id'];
-        $art->title = $db['title'];
-        $art->description = $db['description'];
-        $art->artist = $db['artist'];
-        $art->source = $db['source'];
-        $art->url = $db['url'];
-        $art->favorited = $db['favorited'];
-        return $art;
+        return new Art(...$db);
+    }
+
+    public static function loadRandomArt(): Art
+    {
+        $db = Database::loadRandomArt();
+        if ($db === null) {
+            return null;
+        }
+
+        return new Art(...$db);
     }
 
     public static function update(Art $art): Art
@@ -42,16 +48,20 @@ class ArtFactory
         string $description,
         string $artist,
         string $source,
+        string $sourceId,
         string $url,
     ): Art {
-        $art = new Art();
-        $art->title = $title;
-        $art->description = $description;
-        $art->artist = $artist;
-        $art->source = $source;
-        $art->favorited = 0;
-        $art->url = $url;
-        $art->id = Database::createArt($art);
+
+        $createDTO = new ArtCreateDTO(
+            title: $title,
+            description: $description,
+            artist: $artist,
+            source: $source,
+            sourceId: $sourceId,
+            url: $url
+        );
+        $id = Database::createArt($createDTO);
+        $art = ArtFromDTO::create(dto: $createDTO, id: $id);
         Storage::storeArt($art);
         return $art;
     }

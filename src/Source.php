@@ -2,21 +2,20 @@
 
 namespace kaitwalla\artwall;
 
+use kaitwalla\artwall\dto\ArtCreateDTO;
+
 abstract class Source
 {
+    public static $sourceName;
     public object $rawData;
-    public Art $artData;
+    public ArtCreateDTO $artData;
 
     public function __construct()
     {
         $this->getRawData();
         $this->assignData();
         return ArtFactory::create(
-            title: $this->artData->title,
-            artist: $this->artData->artist,
-            url: $this->artData->url,
-            source: $this->artData->source,
-            description: $this->artData->description
+            ...(array)$this->artData
         );
     }
 

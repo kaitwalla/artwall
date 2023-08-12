@@ -2,6 +2,8 @@
 
 namespace kaitwalla\artwall;
 
+use kaitwalla\artwall\dto\ArtCreateDTO;
+
 class Storage
 {
     public static function storeArt(Art $art)
