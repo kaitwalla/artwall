@@ -30,7 +30,7 @@ class Main {
     const frame = DomElement.create("div.frame");
     const mat = DomElement.create("div.mat");
     const art = DomElement.create(
-      `img.art[src="/images/${this.currentArt.id}.jpg"]`
+      `img.art[style="background-image:url(/images/${this.currentArt.id}.jpg);"]`
     );
     frame.append(mat);
     frame.append(art);

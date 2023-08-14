@@ -48,10 +48,10 @@ body {
   transition: opacity 2.5s;
 }
 .frame .art {
-  max-height: calc(100vh - 15vw);
-  max-width: 95vw;
+  width: 90vw;
+  height: 90vh;
   display: block;
-  width: auto;
+  background-size: cover;
 }
 .frame .mat {
   z-index: 2;

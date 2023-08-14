@@ -152,7 +152,7 @@
                 }, 4000);
                 var frame = DomElement.create("div.frame");
                 var mat = DomElement.create("div.mat");
-                var art = DomElement.create("img.art[src=\"/images/".concat(_this.currentArt.id, ".jpg\"]"));
+                var art = DomElement.create("img.art[style=\"background-image:url(/images/".concat(_this.currentArt.id, ".jpg);\"]"));
                 frame.append(mat);
                 frame.append(art);
                 document.body.append(frame);
