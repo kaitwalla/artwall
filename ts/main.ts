@@ -25,7 +25,6 @@ class Main {
 
   listenForInstructions = () => {
     document.body.addEventListener("keyup", (e) => {
-      console.log(e.key);
       switch (e.key) {
         case "ArrowRight":
           this.getNewArt();

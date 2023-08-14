@@ -160,7 +160,6 @@
             };
             this.listenForInstructions = function () {
                 document.body.addEventListener("keyup", function (e) {
-                    console.log(e.key);
                     switch (e.key) {
                         case "ArrowRight":
                             _this.getNewArt();
