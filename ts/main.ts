@@ -25,6 +25,7 @@ class Main {
 
   listenForInstructions = () => {
     document.body.addEventListener("keyup", (e) => {
+      console.log(e.key);
       switch (e.key) {
         case "ArrowRight":
           this.getNewArt();
@@ -37,7 +38,12 @@ class Main {
           this.currentType = ArtType.Random;
           this.getNewArt();
           break;
-        default:
+        case "ArrowLeft":
+          this.currentType = ArtType.Favorited;
+          this.getNewArt();
+          break;
+        case "f":
+        case "Enter":
           this.favoriteArt();
           break;
       }

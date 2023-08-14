@@ -35,6 +35,9 @@ if (isset($response['action'])) {
                 print json_encode($art);
             }
             break;
+        case 'favorites':
+            print json_encode(ArtFactory::loadFavorite());
+            break;
         case 'randomNewArt':
             print json_encode(SourceFactory::getNewArt());
             break;

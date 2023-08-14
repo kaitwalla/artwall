@@ -27,6 +27,16 @@ class ArtFactory
         return new Art(...$db);
     }
 
+    public static function loadFavorite(): Art
+    {
+        $db = Database::loadRandomFavoriteArt();
+        if ($db === null) {
+            return null;
+        }
+
+        return new Art(...$db);
+    }
+
     public static function loadRandomArt(): Art | null
     {
         $db = Database::loadRandomArt();

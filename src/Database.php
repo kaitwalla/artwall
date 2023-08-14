@@ -32,6 +32,14 @@ class Database
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public static function loadRandomFavoriteArt()
+    {
+        $db = new self();
+        $stmt = $db->db->prepare('SELECT * FROM art WHERE favorited IS true ORDER BY RANDOM() LIMIT 1');
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
     public static function createArt(ArtCreateDTO $createDTO)
     {
         $db = new self();
@@ -52,11 +60,11 @@ class Database
         $sql = 'UPDATE art SET ';
         foreach (get_object_vars($properties) as $property => $value) {
             if ($property !== 'id' && $value !== null) {
-                $sql .= $property . ' = :' . $value . ', ';
+                $sql .= $property . ' = ' . $value . ', ';
             }
         }
         $sql = substr($sql, 0, -2);
-        $sql .= ' WHERE id = :id';
+        $sql .= ' WHERE id = ' . $properties->id;
         $stmt = $db->db->prepare($sql);
         return $stmt->execute();
     }

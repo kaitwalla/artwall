@@ -77,6 +77,7 @@
                         break;
                     case ArtType.Favorited:
                         action = "favorites";
+                        break;
                     case ArtType.Random:
                     default:
                         action = "randomNewArt";
@@ -159,6 +160,7 @@
             };
             this.listenForInstructions = function () {
                 document.body.addEventListener("keyup", function (e) {
+                    console.log(e.key);
                     switch (e.key) {
                         case "ArrowRight":
                             _this.getNewArt();
@@ -171,7 +173,12 @@
                             _this.currentType = ArtType.Random;
                             _this.getNewArt();
                             break;
-                        default:
+                        case "ArrowLeft":
+                            _this.currentType = ArtType.Favorited;
+                            _this.getNewArt();
+                            break;
+                        case "f":
+                        case "Enter":
                             _this.favoriteArt();
                             break;
                     }
