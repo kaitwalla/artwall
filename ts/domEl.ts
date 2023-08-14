@@ -37,7 +37,11 @@ export class DomElement {
             attribute[1] = fullAttribute.replace(/"/g, "");
           }
           attribute[0] = attribute[0].replace("[", "");
-          this.el.setAttribute(attribute[0], attribute[1]);
+          if (attribute[0] === "innerText") {
+            this.el.innerText = attribute[1];
+          } else {
+            this.el.setAttribute(attribute[0], attribute[1]);
+          }
         });
       }
       if (this.id && this.id.length === 1) {

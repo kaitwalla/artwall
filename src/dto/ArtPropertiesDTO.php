@@ -1,5 +1,7 @@
 <?php
 
+namespace kaitwalla\artwalla\dto;
+
 class ArtPropertiesDTO
 {
     public function __construct(

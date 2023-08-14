@@ -70,3 +70,41 @@ body {
         background-color: #000;
     }
 }
+
+.heart {
+    content: '❤️';
+    position: fixed;
+    top: 100%;
+    z-index: 10;
+    right: 80%;
+    font-size: 30px;
+    animation: heartBeat 3.5s ease-in-out;
+}
+
+@keyframes heartBeat {
+    0% {
+        top: 100%;
+        right: 80%;
+        transform: scale(1);
+    }
+    30% {
+        right: 75%;
+        top: 94%;
+        transform: scale(1.2);
+    }
+    50%  {
+        top: 88%;
+        right: 80%;
+        opacity: 1;
+    }
+    70% {
+        top: 84%;
+        right:85%;
+    }
+    100% {
+        opacity: 0.1;
+        right: 80%;
+        top: 50%;
+        transform: scale(1);
+    }
+}

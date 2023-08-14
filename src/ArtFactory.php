@@ -2,10 +2,9 @@
 
 namespace kaitwalla\artwalla;
 
-use ArtPropertiesDTO;
 use kaitwalla\artwalla\dto\ArtCreateDTO;
 use kaitwalla\artwalla\dto\ArtFromDTO;
-use kaitwalla\artwalla\dtos\ArtCreateDTO as DtosArtCreateDTO;
+use kaitwalla\artwalla\dto\ArtPropertiesDTO;
 
 class ArtFactory
 {
@@ -38,10 +37,10 @@ class ArtFactory
         }
     }
 
-    public static function update(ArtPropertiesDTO $props): void
+    public static function update(ArtPropertiesDTO $props): bool
     {
         $art = Database::updateArt($props);
-        //return $art;
+        return $art;
     }
 
     public static function create(

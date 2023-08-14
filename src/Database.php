@@ -2,8 +2,8 @@
 
 namespace kaitwalla\artwalla;
 
-use ArtPropertiesDTO;
 use kaitwalla\artwalla\dto\ArtCreateDTO;
+use kaitwalla\artwalla\dto\ArtPropertiesDTO;
 
 class Database
 {
@@ -46,19 +46,19 @@ class Database
         return $db->db->lastInsertId();
     }
 
-    public static function updateArt(ArtPropertiesDTO $properties)
+    public static function updateArt(ArtPropertiesDTO $properties): bool
     {
         $db = new self();
         $sql = 'UPDATE art SET ';
-        foreach (get_object_vars($properties) as $property) {
-            if ($property !== 'id' && $properties->{$property} !== null) {
-                $sql .= $property . ' = :' . $property . ', ';
+        foreach (get_object_vars($properties) as $property => $value) {
+            if ($property !== 'id' && $value !== null) {
+                $sql .= $property . ' = :' . $value . ', ';
             }
         }
         $sql = substr($sql, 0, -2);
         $sql .= ' WHERE id = :id';
         $stmt = $db->db->prepare($sql);
-        var_dump($stmt->execute());
+        return $stmt->execute();
     }
 
     public static function sourceIdExists(string $source, string|int $sourceId)

@@ -18,4 +18,10 @@ export class Api {
       response.json()
     );
   };
+
+  public static favoriteArt = async (id: number) => {
+    return fetch("action.php?action=favorite&id=" + id).then((response) =>
+      response.json()
+    );
+  };
 }

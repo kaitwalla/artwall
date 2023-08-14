@@ -87,6 +87,13 @@
                     })];
             });
         }); };
+        Api.favoriteArt = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+            return __generator(_a, function (_b) {
+                return [2 /*return*/, fetch("action.php?action=favorite&id=" + id).then(function (response) {
+                        return response.json();
+                    })];
+            });
+        }); };
         return Api;
     }());
 
@@ -118,7 +125,12 @@
                             attribute[1] = fullAttribute.replace(/"/g, "");
                         }
                         attribute[0] = attribute[0].replace("[", "");
-                        _this.el.setAttribute(attribute[0], attribute[1]);
+                        if (attribute[0] === "innerText") {
+                            _this.el.innerText = attribute[1];
+                        }
+                        else {
+                            _this.el.setAttribute(attribute[0], attribute[1]);
+                        }
                     });
                 }
                 if (this.id && this.id.length === 1) {
@@ -145,6 +157,32 @@
                     }
                 });
             };
+            this.listenForInstructions = function () {
+                document.body.addEventListener("keyup", function (e) {
+                    switch (e.key) {
+                        case "ArrowRight":
+                            _this.getNewArt();
+                            break;
+                        case "ArrowUp":
+                            _this.currentType = ArtType.Cached;
+                            _this.getNewArt();
+                            break;
+                        case "ArrowDown":
+                            _this.currentType = ArtType.Random;
+                            _this.getNewArt();
+                            break;
+                        default:
+                            _this.favoriteArt();
+                            break;
+                    }
+                });
+            };
+            this.favoriteArt = function () {
+                Api.favoriteArt(_this.currentArt.id).then(function (art) { });
+                var heart = DomElement.create('span.heart[innerText="❤️"]');
+                document.body.append(heart);
+                setTimeout(function () { return heart.remove(); }, 4000);
+            };
             this.renderArt = function () {
                 var artOnPage = document.querySelector(".frame");
                 setTimeout(function () {
@@ -162,6 +200,7 @@
                 _this.getNewArt();
             }, 500000);
             this.getNewArt();
+            this.listenForInstructions();
         }
         return Main;
     }());

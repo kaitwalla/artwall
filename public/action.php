@@ -1,6 +1,7 @@
 <?php
 
 use Dotenv\Dotenv;
+use kaitwalla\artwalla\dto\ArtPropertiesDTO;
 use kaitwalla\artwalla\ArtFactory;
 use kaitwalla\artwalla\SourceFactory;
 
@@ -39,8 +40,11 @@ if (isset($response['action'])) {
             break;
         case 'favorite':
             if (isset($response['id'])) {
-                ArtFactory::update($response['id'], ['favorited' => true]);
-                print json_encode(['success']);
+                if (ArtFactory::update(new ArtPropertiesDTO(id: intVal($response['id']), favorited: true))) {
+                    print json_encode(['success']);
+                } else {
+                    print json_encode(['error' => 'It broke']);
+                }
             } else {
                 print json_encode(['error' => 'No ID provided']);
             }

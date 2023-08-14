@@ -11,6 +11,7 @@ class Main {
       this.getNewArt();
     }, 500000);
     this.getNewArt();
+    this.listenForInstructions();
   }
 
   getNewArt = () => {
@@ -20,6 +21,34 @@ class Main {
         this.renderArt();
       }
     });
+  };
+
+  listenForInstructions = () => {
+    document.body.addEventListener("keyup", (e) => {
+      switch (e.key) {
+        case "ArrowRight":
+          this.getNewArt();
+          break;
+        case "ArrowUp":
+          this.currentType = ArtType.Cached;
+          this.getNewArt();
+          break;
+        case "ArrowDown":
+          this.currentType = ArtType.Random;
+          this.getNewArt();
+          break;
+        default:
+          this.favoriteArt();
+          break;
+      }
+    });
+  };
+
+  favoriteArt = () => {
+    Api.favoriteArt(this.currentArt.id).then((art) => {});
+    const heart = DomElement.create('span.heart[innerText="❤️"]');
+    document.body.append(heart);
+    setTimeout(() => heart.remove(), 4000);
   };
 
   renderArt = () => {
