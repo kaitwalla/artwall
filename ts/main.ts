@@ -1,11 +1,19 @@
+import { env } from "./env";
 import { Api } from "./api";
 import { Art, ArtType } from "./interface/art";
 import { DomElement } from "./domEl";
 import "../scss/main.scss";
 
+enum NotificationType {
+  NEWART = "newArt",
+  RANDOMART = "randomArt",
+  CACHEDART = "cachedArt",
+  FAVORITEDART = "favoritedArt",
+}
+
 class Main {
   currentArt: Art;
-  currentType: ArtType = ArtType.Random;
+  currentType: ArtType = ArtType.Cached;
   constructor() {
     setInterval(() => {
       this.getNewArt();
@@ -14,7 +22,47 @@ class Main {
     this.listenForInstructions();
   }
 
-  getNewArt = () => {
+  connectToSocket = () => {
+    const socket = new WebSocket(
+      `wss://${env.GOTIFY_SERVER_URL}/stream?token=C8Xi7C5QAOEyKLW`
+    );
+
+    socket.addEventListener("message", (event: MessageEvent<any>) => {
+      if (event) {
+        const message = JSON.parse(event.data);
+        if (message.title === "client:command") {
+          switch (message.message) {
+            case "next":
+              this.getNewArt(true);
+              break;
+            case "favorite":
+              this.favoriteArt();
+              break;
+            case "type-random":
+              this.switchType(ArtType.Random);
+              break;
+            case "type-cached":
+              this.switchType(ArtType.Cached);
+              break;
+            case "type-favorited":
+              this.switchType(ArtType.Favorited);
+              break;
+          }
+        }
+      }
+    });
+  };
+
+  notify = (type: NotificationType) => {
+    const notification = DomElement.create(`div.notification.${type}`);
+    document.body.append(notification);
+    setTimeout(() => notification.remove(), 3200);
+  };
+
+  getNewArt = (notify = false) => {
+    if (notify) {
+      this.notify(NotificationType.NEWART);
+    }
     Api.getArt(this.currentType).then((art) => {
       if (art && art.id && art.id !== this.currentArt?.id) {
         this.currentArt = art;
@@ -24,22 +72,20 @@ class Main {
   };
 
   listenForInstructions = () => {
+    this.connectToSocket();
     document.body.addEventListener("keyup", (e) => {
       switch (e.key) {
         case "ArrowRight":
-          this.getNewArt();
+          this.getNewArt(true);
           break;
         case "ArrowUp":
-          this.currentType = ArtType.Cached;
-          this.getNewArt();
+          this.switchType(ArtType.Cached);
           break;
         case "ArrowDown":
-          this.currentType = ArtType.Random;
-          this.getNewArt();
+          this.switchType(ArtType.Random);
           break;
         case "ArrowLeft":
-          this.currentType = ArtType.Favorited;
-          this.getNewArt();
+          this.switchType(ArtType.Favorited);
           break;
         case "f":
         case "Enter":
@@ -48,6 +94,22 @@ class Main {
       }
     });
   };
+
+  switchType(type: ArtType) {
+    this.currentType = type;
+    switch (type) {
+      case ArtType.Cached:
+        this.notify(NotificationType.CACHEDART);
+        break;
+      case ArtType.Random:
+        this.notify(NotificationType.RANDOMART);
+        break;
+      case ArtType.Favorited:
+        this.notify(NotificationType.FAVORITEDART);
+        break;
+    }
+    this.getNewArt();
+  }
 
   favoriteArt = () => {
     Api.favoriteArt(this.currentArt.id).then((art) => {});

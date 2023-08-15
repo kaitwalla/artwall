@@ -1,6 +1,14 @@
 (function () {
     'use strict';
 
+    var env = /** @class */ (function () {
+        function env() {
+        }
+        env.GOTIFY_SERVER_URL = "push.wudge.pengin";
+        env.GOTIFY_TOKEN = "CRg_6uYafayGTr_";
+        return env;
+    }());
+
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
 
@@ -145,11 +153,54 @@
         return DomElement;
     }());
 
+    var NotificationType;
+    (function (NotificationType) {
+        NotificationType["NEWART"] = "newArt";
+        NotificationType["RANDOMART"] = "randomArt";
+        NotificationType["CACHEDART"] = "cachedArt";
+        NotificationType["FAVORITEDART"] = "favoritedArt";
+    })(NotificationType || (NotificationType = {}));
     var Main = /** @class */ (function () {
         function Main() {
             var _this = this;
-            this.currentType = ArtType.Random;
-            this.getNewArt = function () {
+            this.currentType = ArtType.Cached;
+            this.connectToSocket = function () {
+                var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=C8Xi7C5QAOEyKLW"));
+                socket.addEventListener("message", function (event) {
+                    if (event) {
+                        var message = JSON.parse(event.data);
+                        if (message.title === "client:command") {
+                            switch (message.message) {
+                                case "next":
+                                    _this.getNewArt(true);
+                                    break;
+                                case "favorite":
+                                    _this.favoriteArt();
+                                    break;
+                                case "type-random":
+                                    _this.switchType(ArtType.Random);
+                                    break;
+                                case "type-cached":
+                                    _this.switchType(ArtType.Cached);
+                                    break;
+                                case "type-favorited":
+                                    _this.switchType(ArtType.Favorited);
+                                    break;
+                            }
+                        }
+                    }
+                });
+            };
+            this.notify = function (type) {
+                var notification = DomElement.create("div.notification.".concat(type));
+                document.body.append(notification);
+                setTimeout(function () { return notification.remove(); }, 3200);
+            };
+            this.getNewArt = function (notify) {
+                if (notify === void 0) { notify = false; }
+                if (notify) {
+                    _this.notify(NotificationType.NEWART);
+                }
                 Api.getArt(_this.currentType).then(function (art) {
                     var _a;
                     if (art && art.id && art.id !== ((_a = _this.currentArt) === null || _a === void 0 ? void 0 : _a.id)) {
@@ -159,22 +210,20 @@
                 });
             };
             this.listenForInstructions = function () {
+                _this.connectToSocket();
                 document.body.addEventListener("keyup", function (e) {
                     switch (e.key) {
                         case "ArrowRight":
-                            _this.getNewArt();
+                            _this.getNewArt(true);
                             break;
                         case "ArrowUp":
-                            _this.currentType = ArtType.Cached;
-                            _this.getNewArt();
+                            _this.switchType(ArtType.Cached);
                             break;
                         case "ArrowDown":
-                            _this.currentType = ArtType.Random;
-                            _this.getNewArt();
+                            _this.switchType(ArtType.Random);
                             break;
                         case "ArrowLeft":
-                            _this.currentType = ArtType.Favorited;
-                            _this.getNewArt();
+                            _this.switchType(ArtType.Favorited);
                             break;
                         case "f":
                         case "Enter":
@@ -208,6 +257,21 @@
             this.getNewArt();
             this.listenForInstructions();
         }
+        Main.prototype.switchType = function (type) {
+            this.currentType = type;
+            switch (type) {
+                case ArtType.Cached:
+                    this.notify(NotificationType.CACHEDART);
+                    break;
+                case ArtType.Random:
+                    this.notify(NotificationType.RANDOMART);
+                    break;
+                case ArtType.Favorited:
+                    this.notify(NotificationType.FAVORITEDART);
+                    break;
+            }
+            this.getNewArt();
+        };
         return Main;
     }());
     new Main();
