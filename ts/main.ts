@@ -47,6 +47,9 @@ class Main {
             case "type-favorited":
               this.switchType(ArtType.Favorited);
               break;
+            case "refresh":
+              window.location.reload();
+              break;
           }
         }
       }

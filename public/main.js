@@ -186,6 +186,9 @@
                                 case "type-favorited":
                                     _this.switchType(ArtType.Favorited);
                                     break;
+                                case "refresh":
+                                    window.location.reload();
+                                    break;
                             }
                         }
                     }
