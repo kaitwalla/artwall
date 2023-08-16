@@ -62,9 +62,11 @@ class ArtFactory
     public static function create(
         ArtCreateDTO $createDTO
     ): Art {
-        $id = Database::createArt($createDTO);
-        $art = ArtFromDTO::create(dto: $createDTO, id: $id);
-        Storage::storeArt($art);
-        return $art;
+        if ($createDTO) {
+            $id = Database::createArt($createDTO);
+            $art = ArtFromDTO::create(dto: $createDTO, id: $id);
+            Storage::storeArt($art);
+            return $art;
+        }
     }
 }

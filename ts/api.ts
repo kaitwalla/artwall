@@ -10,6 +10,9 @@ export class Api {
       case ArtType.Favorited:
         action = "favorites";
         break;
+      case ArtType.Videos:
+        action = "video";
+        break;
       case ArtType.Random:
       default:
         action = "randomNewArt";

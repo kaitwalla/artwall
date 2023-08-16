@@ -5,7 +5,7 @@
         function env() {
         }
         env.GOTIFY_SERVER_URL = "push.wudge.pengin";
-        env.GOTIFY_TOKEN = "CRg_6uYafayGTr_";
+        env.GOTIFY_TOKEN = "AVEuQn2hbDMXx7p";
         return env;
     }());
 
@@ -69,6 +69,7 @@
         ArtType[ArtType["Random"] = 0] = "Random";
         ArtType[ArtType["Cached"] = 1] = "Cached";
         ArtType[ArtType["Favorited"] = 2] = "Favorited";
+        ArtType[ArtType["Videos"] = 3] = "Videos";
     })(ArtType || (ArtType = {}));
 
     var Api = /** @class */ (function () {
@@ -85,6 +86,9 @@
                         break;
                     case ArtType.Favorited:
                         action = "favorites";
+                        break;
+                    case ArtType.Videos:
+                        action = "video";
                         break;
                     case ArtType.Random:
                     default:
@@ -164,6 +168,7 @@
         NotificationType["RANDOMART"] = "randomArt";
         NotificationType["CACHEDART"] = "cachedArt";
         NotificationType["FAVORITEDART"] = "favoritedArt";
+        NotificationType["VIDEOS"] = "videos";
     })(NotificationType || (NotificationType = {}));
     var Main = /** @class */ (function () {
         function Main() {
@@ -180,8 +185,7 @@
                                     _this.getNewArt(true);
                                     break;
                                 case "delete":
-                                    Api.deleteArt(_this.currentArt.id);
-                                    _this.getNewArt(true);
+                                    _this.deleteArt();
                                     break;
                                 case "favorite":
                                     _this.favoriteArt();
@@ -195,6 +199,9 @@
                                 case "type-favorited":
                                     _this.switchType(ArtType.Favorited);
                                     break;
+                                case "type-videos":
+                                    _this.switchType(ArtType.Videos);
+                                    break;
                                 case "refresh":
                                     window.location.reload();
                                     break;
@@ -203,31 +210,55 @@
                     }
                 });
             };
+            this.deleteArt = function () {
+                if (_this.currentType === ArtType.Videos) {
+                    Api.deleteArt(_this.currentArt.id);
+                    _this.getNewArt(true);
+                }
+            };
             this.notify = function (type) {
                 var notification = DomElement.create("div.notification.".concat(type));
                 document.body.append(notification);
                 setTimeout(function () { return notification.remove(); }, 3200);
             };
+            this.setInterval = function () {
+                if (_this.interval) {
+                    clearInterval(_this.interval);
+                }
+                var time = _this.currentType === ArtType.Videos ? 1000000 : 500000;
+                _this.interval = setInterval(function () {
+                    _this.getNewArt();
+                }, time);
+            };
             this.getNewArt = function (notify) {
                 if (notify === void 0) { notify = false; }
-                if (notify) {
-                    _this.notify(NotificationType.NEWART);
-                }
-                Api.getArt(_this.currentType).then(function (art) {
-                    var _a;
-                    if (art && art.id && art.id !== ((_a = _this.currentArt) === null || _a === void 0 ? void 0 : _a.id)) {
-                        _this.currentArt = art;
-                        _this.renderArt();
+                if (_this.currentType !== ArtType.Videos) {
+                    if (notify) {
+                        _this.notify(NotificationType.NEWART);
                     }
-                });
+                    Api.getArt(_this.currentType).then(function (art) {
+                        var _a;
+                        if (art && art.id && art.id !== ((_a = _this.currentArt) === null || _a === void 0 ? void 0 : _a.id)) {
+                            _this.currentArt = art;
+                            _this.renderArt();
+                        }
+                    });
+                }
+                else {
+                    Api.getArt(_this.currentType).then(function (video) {
+                        _this.renderVideo(video);
+                    });
+                }
             };
             this.listenForInstructions = function () {
                 _this.connectToSocket();
                 document.body.addEventListener("keyup", function (e) {
                     switch (e.key) {
                         case "d":
-                            Api.deleteArt(_this.currentArt.id);
-                            _this.getNewArt(true);
+                            _this.deleteArt();
+                            break;
+                        case "v":
+                            _this.switchType(ArtType.Videos);
                             break;
                         case "ArrowRight":
                             _this.getNewArt(true);
@@ -249,16 +280,21 @@
                 });
             };
             this.favoriteArt = function () {
-                Api.favoriteArt(_this.currentArt.id).then(function (art) { });
-                var heart = DomElement.create('span.heart[innerText="❤️"]');
-                document.body.append(heart);
-                setTimeout(function () { return heart.remove(); }, 4000);
+                if (_this.currentType !== ArtType.Videos) {
+                    Api.favoriteArt(_this.currentArt.id).then(function (art) { });
+                    var heart_1 = DomElement.create('span.heart[innerText="❤️"]');
+                    document.body.append(heart_1);
+                    setTimeout(function () { return heart_1.remove(); }, 4000);
+                }
             };
-            this.renderArt = function () {
+            this.hideCurrentArt = function () {
                 var artOnPage = document.querySelector(".frame");
                 setTimeout(function () {
                     artOnPage === null || artOnPage === void 0 ? void 0 : artOnPage.remove();
                 }, 4000);
+            };
+            this.renderArt = function () {
+                _this.hideCurrentArt();
                 var frame = DomElement.create("div.frame");
                 var mat = DomElement.create("div.mat");
                 var art = DomElement.create("img.art[style=\"background-image:url(/images/".concat(_this.currentArt.id, ".jpg);\"]"));
@@ -267,9 +303,19 @@
                 document.body.append(frame);
                 setTimeout(function () { return frame.classList.add("fade-in"); }, 2000);
             };
-            setInterval(function () {
-                _this.getNewArt();
-            }, 500000);
+            this.renderVideo = function (videoResponse) {
+                _this.hideCurrentArt();
+                var frame = DomElement.create("div.frame.video");
+                var mat = DomElement.create("div.mat");
+                var container = DomElement.create("div.container");
+                var video = DomElement.create("video[autoplay=true][loop=true][muted=true][src=\"/videos/".concat(videoResponse.video, "\"]"));
+                container.append(video);
+                frame.append(container);
+                frame.append(mat);
+                document.body.append(frame);
+                setTimeout(function () { return frame.classList.add("fade-in"); }, 2000);
+            };
+            this.setInterval();
             this.getNewArt();
             this.listenForInstructions();
         }
@@ -284,6 +330,9 @@
                     break;
                 case ArtType.Favorited:
                     this.notify(NotificationType.FAVORITEDART);
+                    break;
+                case ArtType.Videos:
+                    this.notify(NotificationType.VIDEOS);
                     break;
             }
             this.getNewArt();

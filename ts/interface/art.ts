@@ -13,4 +13,5 @@ export enum ArtType {
   Random,
   Cached,
   Favorited,
+  Videos,
 }

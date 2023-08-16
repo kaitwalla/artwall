@@ -63,5 +63,11 @@ if (isset($response['action'])) {
             } else {
                 print json_encode(['error' => 'No ID provided']);
             }
+            break;
+        case 'video':
+            $files = glob(__DIR__ . '/../public/videos/*.*');
+            $file = array_rand($files);
+            print json_encode(['video' => basename($files[$file])]);
+            break;
     }
 }

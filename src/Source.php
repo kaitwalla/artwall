@@ -14,9 +14,11 @@ abstract class Source
     public function __construct()
     {
         $this->assignData();
-        $this->art = ArtFactory::create(
-            new ArtCreateDTO(...(array)$this->artData)
-        );
+        if ($this->artData) {
+            $this->art = ArtFactory::create(
+                new ArtCreateDTO(...(array)$this->artData)
+            );
+        }
     }
 
     public static function createNewArt(): Art

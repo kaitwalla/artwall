@@ -34,14 +34,16 @@ class Unsplash extends Source
 
     protected function assignData(): void
     {
-        $this->artData = new ArtCreateDTO(
-            title: ($this->rawData->description) ? $this->rawData->description : '',
-            category: $this->flattenTags($this->rawData->tags),
-            description: $this->rawData->alt_description,
-            artist: $this->rawData->user->name,
-            url: $this->rawData->urls->full,
-            source: self::$sourceName,
-            sourceId: $this->rawData->id,
-        );
+        if ($this->rawData) {
+            $this->artData = new ArtCreateDTO(
+                title: ($this->rawData->description) ? $this->rawData->description : '',
+                category: $this->flattenTags($this->rawData->tags),
+                description: $this->rawData->alt_description,
+                artist: $this->rawData->user->name,
+                url: $this->rawData->urls->full,
+                source: self::$sourceName,
+                sourceId: $this->rawData->id,
+            );
+        }
     }
 }

@@ -9,15 +9,19 @@ enum NotificationType {
   RANDOMART = "randomArt",
   CACHEDART = "cachedArt",
   FAVORITEDART = "favoritedArt",
+  VIDEOS = "videos",
+}
+
+interface VideoApiResponse {
+  video: string;
 }
 
 class Main {
   currentArt: Art;
   currentType: ArtType = ArtType.Random;
+  interval: NodeJS.Timer;
   constructor() {
-    setInterval(() => {
-      this.getNewArt();
-    }, 500000);
+    this.setInterval();
     this.getNewArt();
     this.listenForInstructions();
   }
@@ -36,8 +40,7 @@ class Main {
               this.getNewArt(true);
               break;
             case "delete":
-              Api.deleteArt(this.currentArt.id);
-              this.getNewArt(true);
+              this.deleteArt();
               break;
             case "favorite":
               this.favoriteArt();
@@ -51,6 +54,9 @@ class Main {
             case "type-favorited":
               this.switchType(ArtType.Favorited);
               break;
+            case "type-videos":
+              this.switchType(ArtType.Videos);
+              break;
             case "refresh":
               window.location.reload();
               break;
@@ -60,22 +66,45 @@ class Main {
     });
   };
 
+  deleteArt = () => {
+    if (this.currentType === ArtType.Videos) {
+      Api.deleteArt(this.currentArt.id);
+      this.getNewArt(true);
+    }
+  };
+
   notify = (type: NotificationType) => {
     const notification = DomElement.create(`div.notification.${type}`);
     document.body.append(notification);
     setTimeout(() => notification.remove(), 3200);
   };
 
-  getNewArt = (notify = false) => {
-    if (notify) {
-      this.notify(NotificationType.NEWART);
+  setInterval = () => {
+    if (this.interval) {
+      clearInterval(this.interval);
     }
-    Api.getArt(this.currentType).then((art) => {
-      if (art && art.id && art.id !== this.currentArt?.id) {
-        this.currentArt = art;
-        this.renderArt();
+    const time = this.currentType === ArtType.Videos ? 1000000 : 500000;
+    this.interval = setInterval(() => {
+      this.getNewArt();
+    }, time);
+  };
+
+  getNewArt = (notify = false) => {
+    if (this.currentType !== ArtType.Videos) {
+      if (notify) {
+        this.notify(NotificationType.NEWART);
       }
-    });
+      Api.getArt(this.currentType).then((art) => {
+        if (art && art.id && art.id !== this.currentArt?.id) {
+          this.currentArt = art;
+          this.renderArt();
+        }
+      });
+    } else {
+      Api.getArt(this.currentType).then((video) => {
+        this.renderVideo(video);
+      });
+    }
   };
 
   listenForInstructions = () => {
@@ -83,8 +112,10 @@ class Main {
     document.body.addEventListener("keyup", (e) => {
       switch (e.key) {
         case "d":
-          Api.deleteArt(this.currentArt.id);
-          this.getNewArt(true);
+          this.deleteArt();
+          break;
+        case "v":
+          this.switchType(ArtType.Videos);
           break;
         case "ArrowRight":
           this.getNewArt(true);
@@ -118,22 +149,31 @@ class Main {
       case ArtType.Favorited:
         this.notify(NotificationType.FAVORITEDART);
         break;
+      case ArtType.Videos:
+        this.notify(NotificationType.VIDEOS);
+        break;
     }
     this.getNewArt();
   }
 
   favoriteArt = () => {
-    Api.favoriteArt(this.currentArt.id).then((art) => {});
-    const heart = DomElement.create('span.heart[innerText="❤️"]');
-    document.body.append(heart);
-    setTimeout(() => heart.remove(), 4000);
+    if (this.currentType !== ArtType.Videos) {
+      Api.favoriteArt(this.currentArt.id).then((art) => {});
+      const heart = DomElement.create('span.heart[innerText="❤️"]');
+      document.body.append(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }
   };
 
-  renderArt = () => {
+  hideCurrentArt = () => {
     const artOnPage = document.querySelector(".frame");
     setTimeout(() => {
       artOnPage?.remove();
     }, 4000);
+  };
+
+  renderArt = () => {
+    this.hideCurrentArt();
     const frame = DomElement.create("div.frame");
     const mat = DomElement.create("div.mat");
     const art = DomElement.create(
@@ -141,6 +181,21 @@ class Main {
     );
     frame.append(mat);
     frame.append(art);
+    document.body.append(frame);
+    setTimeout(() => frame.classList.add("fade-in"), 2000);
+  };
+
+  renderVideo = (videoResponse: VideoApiResponse) => {
+    this.hideCurrentArt();
+    const frame = DomElement.create("div.frame.video");
+    const mat = DomElement.create("div.mat");
+    const container = DomElement.create("div.container");
+    const video = DomElement.create(
+      `video[autoplay=true][loop=true][muted=true][src="/videos/${videoResponse.video}"]`
+    );
+    container.append(video);
+    frame.append(container);
+    frame.append(mat);
     document.body.append(frame);
     setTimeout(() => frame.classList.add("fade-in"), 2000);
   };

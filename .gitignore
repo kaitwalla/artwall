@@ -4,3 +4,4 @@ data/artwalla.db
 /public/images/*.jpg
 /vendor/
 env.ts
+*.mov

@@ -49,6 +49,9 @@ body {
     &.randomArt {
         background-color: cornflowerblue;
     }
+    &.videos {
+        background-color: orange;
+    }
 }
 
 @keyframes notify {
@@ -75,10 +78,9 @@ body {
 .frame {
     z-index: 5;
     position: fixed;
-    top: 50%;
-    left: 50%;
+    left: 5vw;
+    top: 5vh;
     opacity: 0;
-    transform: translate(-50%, -50%);
     background-size: contain;
     display: block;
     background-position: center;
@@ -104,6 +106,19 @@ body {
         display: block;
         position: absolute;
         box-shadow: inset 0px 0px 11px 0px rgba(0, 0, 0, 0.15)
+    }
+    &.video {
+        .container {
+            position: fixed;
+            width: 90vw;
+            height: 90vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+        video {
+            height: 90vh;
+            transform: translateX(-10%);
+        }
     }
 }
 
