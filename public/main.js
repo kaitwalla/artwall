@@ -5,7 +5,10 @@
         function env() {
         }
         env.GOTIFY_SERVER_URL = "push.wudge.pengin";
-        env.GOTIFY_TOKEN = "AVEuQn2hbDMXx7p";
+        // Dev server
+        //static GOTIFY_TOKEN = "AVEuQn2hbDMXx7p";
+        // Live server
+        env.GOTIFY_TOKEN = "CRg_6uYafayGTr_";
         return env;
     }());
 
