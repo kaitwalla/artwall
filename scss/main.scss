@@ -116,9 +116,18 @@ body {
             overflow: hidden;
         }
         video {
+            animation: video 60s ease-in-out infinite alternate;
             height: 90vh;
-            transform: translateX(-10%);
         }
+    }
+}
+
+@keyframes video {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-100% + 100vh));
     }
 }
 
