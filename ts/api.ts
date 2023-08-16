@@ -21,7 +21,7 @@ export class Api {
   };
 
   public static deleteArt = async (id: number) => {
-    return fetch("action.php?action=delete&id=" + id);
+    return fetch("action.php?action=deleteArt&id=" + id);
   };
 
   public static favoriteArt = async (id: number) => {

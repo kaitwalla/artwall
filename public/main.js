@@ -98,7 +98,7 @@
         }); };
         Api.deleteArt = function (id) { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(_a, function (_b) {
-                return [2 /*return*/, fetch("action.php?action=delete&id=" + id)];
+                return [2 /*return*/, fetch("action.php?action=deleteArt&id=" + id)];
             });
         }); };
         Api.favoriteArt = function (id) { return __awaiter(void 0, void 0, void 0, function () {
