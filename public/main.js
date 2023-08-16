@@ -182,6 +182,7 @@
                                 case "delete":
                                     Api.deleteArt(_this.currentArt.id);
                                     _this.getNewArt(true);
+                                    break;
                                 case "favorite":
                                     _this.favoriteArt();
                                     break;

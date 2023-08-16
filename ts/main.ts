@@ -38,6 +38,7 @@ class Main {
             case "delete":
               Api.deleteArt(this.currentArt.id);
               this.getNewArt(true);
+              break;
             case "favorite":
               this.favoriteArt();
               break;
