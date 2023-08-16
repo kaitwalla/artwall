@@ -3,6 +3,7 @@
 use Dotenv\Dotenv;
 use kaitwalla\artwalla\dto\ArtPropertiesDTO;
 use kaitwalla\artwalla\ArtFactory;
+use kaitwalla\artwalla\Database;
 use kaitwalla\artwalla\SourceFactory;
 
 require_once(__DIR__ . '/../vendor/autoload.php');
@@ -20,6 +21,17 @@ $response = (!empty($_POST)) ? $_POST : $_GET;
 
 if (isset($response['action'])) {
     switch ($response['action']) {
+        case 'deleteArt':
+            if (empty($response['id'])) {
+                echo json_encode(['error' => 'No ID provided']);
+                exit;
+            }
+            if (ArtFactory::delete($response['id'])) {
+                echo json_encode(['success']);
+            } else {
+                echo json_encode(['error' => 'It broke']);
+            }
+            break;
         case 'storedArt':
             if (empty($response['id'])) {
                 echo json_encode(['error' => 'No ID provided']);

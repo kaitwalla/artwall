@@ -15,4 +15,9 @@ class Storage
         file_put_contents(__DIR__ . '/../public/' . $path, $file);
         $db = new Database();
     }
+
+    public static function deleteArt(int $id)
+    {
+        return unlink(__DIR__ . '/../public/images/' . $id . '.jpg');
+    }
 }

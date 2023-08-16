@@ -40,6 +40,14 @@ class Database
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public static function deleteArt(int $id)
+    {
+        $db = new self();
+        $stmt = $db->db->prepare('DELETE FROM art WHERE id = :id');
+        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     public static function createArt(ArtCreateDTO $createDTO)
     {
         $db = new self();

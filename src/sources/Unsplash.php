@@ -8,10 +8,19 @@ use kaitwalla\artwalla\Source;
 
 class Unsplash extends Source
 {
+    // Arts & Culture, wallpapers, nature, experimental
+    public static $topicIds = ['bDo48cUhwnY', 'bo8jQKTaE0Y', '6sMVjTLSkeQ', 'qPYsDzvJOYc'];
     public static $sourceName = 'unsplash';
+
+    public function __construct()
+    {
+        $this->getRawData();
+        parent::__construct();
+    }
+
     public function getRawData(): void
     {
-        $this->rawData = json_decode(file_get_contents('https://api.unsplash.com/photos/random?orientation=portrait&client_id=' . $_ENV['unsplashApiKey']));
+        $this->rawData = json_decode(file_get_contents('https://api.unsplash.com/photos/random?topics=' . implode(',', self::$topicIds) . '&orientation=portrait&client_id=' . $_ENV['unsplashApiKey']));
     }
 
     protected function flattenTags(array $tags)

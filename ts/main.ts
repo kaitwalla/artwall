@@ -13,7 +13,7 @@ enum NotificationType {
 
 class Main {
   currentArt: Art;
-  currentType: ArtType = ArtType.Cached;
+  currentType: ArtType = ArtType.Random;
   constructor() {
     setInterval(() => {
       this.getNewArt();
@@ -35,6 +35,9 @@ class Main {
             case "next":
               this.getNewArt(true);
               break;
+            case "delete":
+              Api.deleteArt(this.currentArt.id);
+              this.getNewArt(true);
             case "favorite":
               this.favoriteArt();
               break;
@@ -78,6 +81,10 @@ class Main {
     this.connectToSocket();
     document.body.addEventListener("keyup", (e) => {
       switch (e.key) {
+        case "d":
+          Api.deleteArt(this.currentArt.id);
+          this.getNewArt(true);
+          break;
         case "ArrowRight":
           this.getNewArt(true);
           break;

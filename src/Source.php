@@ -13,7 +13,6 @@ abstract class Source
 
     public function __construct()
     {
-        $this->getRawData();
         $this->assignData();
         $this->art = ArtFactory::create(
             new ArtCreateDTO(...(array)$this->artData)
@@ -25,8 +24,6 @@ abstract class Source
         $source = new static();
         return $source->art;
     }
-
-    abstract protected function getRawData(): void;
 
     abstract protected function assignData(): void;
 }

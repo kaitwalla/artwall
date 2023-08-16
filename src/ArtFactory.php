@@ -17,6 +17,12 @@ class ArtFactory
         }
     }
 
+    public static function delete(int $id): bool
+    {
+        $status = Database::deleteArt($id);
+        return ($status) ? Storage::deleteArt($id) : $status;
+    }
+
     public static function load(int $id): Art
     {
         $db = Database::loadArt($id);

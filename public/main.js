@@ -96,6 +96,11 @@
                     })];
             });
         }); };
+        Api.deleteArt = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+            return __generator(_a, function (_b) {
+                return [2 /*return*/, fetch("action.php?action=delete&id=" + id)];
+            });
+        }); };
         Api.favoriteArt = function (id) { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(_a, function (_b) {
                 return [2 /*return*/, fetch("action.php?action=favorite&id=" + id).then(function (response) {
@@ -163,7 +168,7 @@
     var Main = /** @class */ (function () {
         function Main() {
             var _this = this;
-            this.currentType = ArtType.Cached;
+            this.currentType = ArtType.Random;
             this.connectToSocket = function () {
                 var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=C8Xi7C5QAOEyKLW"));
                 socket.addEventListener("message", function (event) {
@@ -174,6 +179,9 @@
                                 case "next":
                                     _this.getNewArt(true);
                                     break;
+                                case "delete":
+                                    Api.deleteArt(_this.currentArt.id);
+                                    _this.getNewArt(true);
                                 case "favorite":
                                     _this.favoriteArt();
                                     break;
@@ -216,6 +224,10 @@
                 _this.connectToSocket();
                 document.body.addEventListener("keyup", function (e) {
                     switch (e.key) {
+                        case "d":
+                            Api.deleteArt(_this.currentArt.id);
+                            _this.getNewArt(true);
+                            break;
                         case "ArrowRight":
                             _this.getNewArt(true);
                             break;

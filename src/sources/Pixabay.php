@@ -14,10 +14,6 @@ class Pixabay extends Source
         parent::__construct();
     }
 
-    public function getRawData(): void
-    {
-    }
-
     protected function assignData(): void
     {
         $this->artData = new ArtCreateDTO(

@@ -20,6 +20,10 @@ export class Api {
     );
   };
 
+  public static deleteArt = async (id: number) => {
+    return fetch("action.php?action=delete&id=" + id);
+  };
+
   public static favoriteArt = async (id: number) => {
     return fetch("action.php?action=favorite&id=" + id).then((response) =>
       response.json()
