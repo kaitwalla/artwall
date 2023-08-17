@@ -18,7 +18,7 @@ interface VideoApiResponse {
 
 class Main {
   currentArt: Art;
-  currentType: ArtType = ArtType.Random;
+  currentType: ArtType = ArtType.Videos;
   interval: NodeJS.Timer;
   switch = true;
 
@@ -39,6 +39,7 @@ class Main {
         if (message.title === "client:command") {
           switch (message.message) {
             case "next":
+              this.randomSwitch();
               this.getNewArt(true);
               break;
             case "delete":
@@ -90,11 +91,12 @@ class Main {
       clearInterval(this.interval);
     }
     this.interval = setInterval(() => {
+      this.randomSwitch();
       this.getNewArt();
     }, 750000);
   };
 
-  getNewArt = (notify = false) => {
+  getNewArt = (notify = false) => {\
     if (this.currentType !== ArtType.Videos) {
       if (notify) {
         this.notify(NotificationType.NEWART);
@@ -124,6 +126,7 @@ class Main {
           this.switch = false;
           break;
         case "ArrowRight":
+          this.randomSwitch();
           this.getNewArt(true);
           break;
         case "ArrowUp":
@@ -148,18 +151,18 @@ class Main {
 
   randomSwitch() {
     if (this.switch) {
-      const randomNum = Math.floor(Math.random() * 4);
+      const randomNum = Math.floor(Math.random() * 4) + 1;
       switch (randomNum) {
-        case 0:
+        case 1:
           this.switchType(ArtType.Random);
           break;
-        case 1:
+        case 2:
           this.switchType(ArtType.Cached);
           break;
-        case 2:
+        case 3:
           this.switchType(ArtType.Favorited);
           break;
-        case 3:
+        case 4:
           this.switchType(ArtType.Videos);
           break;
       }

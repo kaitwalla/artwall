@@ -176,7 +176,7 @@
     var Main = /** @class */ (function () {
         function Main() {
             var _this = this;
-            this.currentType = ArtType.Random;
+            this.currentType = ArtType.Videos;
             this.switch = true;
             this.connectToSocket = function () {
                 var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=C8Xi7C5QAOEyKLW"));
@@ -186,6 +186,7 @@
                         if (message.title === "client:command") {
                             switch (message.message) {
                                 case "next":
+                                    _this.randomSwitch();
                                     _this.getNewArt(true);
                                     break;
                                 case "delete":
@@ -234,6 +235,7 @@
                     clearInterval(_this.interval);
                 }
                 _this.interval = setInterval(function () {
+                    _this.randomSwitch();
                     _this.getNewArt();
                 }, 750000);
             };
@@ -269,6 +271,7 @@
                             _this.switch = false;
                             break;
                         case "ArrowRight":
+                            _this.randomSwitch();
                             _this.getNewArt(true);
                             break;
                         case "ArrowUp":
@@ -332,18 +335,19 @@
         }
         Main.prototype.randomSwitch = function () {
             if (this.switch) {
-                var randomNum = Math.floor(Math.random() * 4);
+                var randomNum = Math.floor(Math.random() * 4) + 1;
+                console.log('number', randomNum);
                 switch (randomNum) {
-                    case 0:
+                    case 1:
                         this.switchType(ArtType.Random);
                         break;
-                    case 1:
+                    case 2:
                         this.switchType(ArtType.Cached);
                         break;
-                    case 2:
+                    case 3:
                         this.switchType(ArtType.Favorited);
                         break;
-                    case 3:
+                    case 4:
                         this.switchType(ArtType.Videos);
                         break;
                 }
@@ -365,7 +369,7 @@
                     this.notify(NotificationType.VIDEOS);
                     break;
             }
-            this.getNewArt();
+            //this.getNewArt();
         };
         return Main;
     }());
