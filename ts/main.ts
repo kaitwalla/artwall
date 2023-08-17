@@ -20,6 +20,8 @@ class Main {
   currentArt: Art;
   currentType: ArtType = ArtType.Random;
   interval: NodeJS.Timer;
+  switch = true;
+
   constructor() {
     this.setInterval();
     this.getNewArt();
@@ -47,15 +49,19 @@ class Main {
               break;
             case "type-random":
               this.switchType(ArtType.Random);
+              this.switch = true;
               break;
             case "type-cached":
               this.switchType(ArtType.Cached);
+              this.switch = false;
               break;
             case "type-favorited":
               this.switchType(ArtType.Favorited);
+              this.switch = false;
               break;
             case "type-videos":
               this.switchType(ArtType.Videos);
+              this.switch = false;
               break;
             case "refresh":
               window.location.reload();
@@ -84,22 +90,7 @@ class Main {
       clearInterval(this.interval);
     }
     this.interval = setInterval(() => {
-      // get a random value from the ArtType enum
-      const randomNum = Math.floor(Math.random() * 4);
-      switch (randomNum) {
-        case 0:
-          this.switchType(ArtType.Random);
-          break;
-        case 1:
-          this.switchType(ArtType.Cached);
-          break;
-        case 2:
-          this.switchType(ArtType.Favorited);
-          break;
-        case 3:
-          this.switchType(ArtType.Videos);
-          break;
-      }
+      this.getNewArt();
     }, 750000);
   };
 
@@ -130,18 +121,22 @@ class Main {
           break;
         case "v":
           this.switchType(ArtType.Videos);
+          this.switch = false;
           break;
         case "ArrowRight":
           this.getNewArt(true);
           break;
         case "ArrowUp":
           this.switchType(ArtType.Cached);
+          this.switch = false;
           break;
         case "ArrowDown":
           this.switchType(ArtType.Random);
+          this.switch = true;
           break;
         case "ArrowLeft":
           this.switchType(ArtType.Favorited);
+          this.switch = false;
           break;
         case "f":
         case "Enter":
@@ -150,6 +145,26 @@ class Main {
       }
     });
   };
+
+  randomSwitch() {
+    if (this.switch) {
+      const randomNum = Math.floor(Math.random() * 4);
+      switch (randomNum) {
+        case 0:
+          this.switchType(ArtType.Random);
+          break;
+        case 1:
+          this.switchType(ArtType.Cached);
+          break;
+        case 2:
+          this.switchType(ArtType.Favorited);
+          break;
+        case 3:
+          this.switchType(ArtType.Videos);
+          break;
+      }
+    }
+  }
 
   switchType(type: ArtType) {
     this.currentType = type;

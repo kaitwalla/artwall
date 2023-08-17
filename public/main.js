@@ -177,6 +177,7 @@
         function Main() {
             var _this = this;
             this.currentType = ArtType.Random;
+            this.switch = true;
             this.connectToSocket = function () {
                 var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=C8Xi7C5QAOEyKLW"));
                 socket.addEventListener("message", function (event) {
@@ -195,15 +196,19 @@
                                     break;
                                 case "type-random":
                                     _this.switchType(ArtType.Random);
+                                    _this.switch = true;
                                     break;
                                 case "type-cached":
                                     _this.switchType(ArtType.Cached);
+                                    _this.switch = false;
                                     break;
                                 case "type-favorited":
                                     _this.switchType(ArtType.Favorited);
+                                    _this.switch = false;
                                     break;
                                 case "type-videos":
                                     _this.switchType(ArtType.Videos);
+                                    _this.switch = false;
                                     break;
                                 case "refresh":
                                     window.location.reload();
@@ -229,22 +234,7 @@
                     clearInterval(_this.interval);
                 }
                 _this.interval = setInterval(function () {
-                    // get a random value from the ArtType enum
-                    var randomNum = Math.floor(Math.random() * 4);
-                    switch (randomNum) {
-                        case 0:
-                            _this.switchType(ArtType.Random);
-                            break;
-                        case 1:
-                            _this.switchType(ArtType.Cached);
-                            break;
-                        case 2:
-                            _this.switchType(ArtType.Favorited);
-                            break;
-                        case 3:
-                            _this.switchType(ArtType.Videos);
-                            break;
-                    }
+                    _this.getNewArt();
                 }, 750000);
             };
             this.getNewArt = function (notify) {
@@ -276,18 +266,22 @@
                             break;
                         case "v":
                             _this.switchType(ArtType.Videos);
+                            _this.switch = false;
                             break;
                         case "ArrowRight":
                             _this.getNewArt(true);
                             break;
                         case "ArrowUp":
                             _this.switchType(ArtType.Cached);
+                            _this.switch = false;
                             break;
                         case "ArrowDown":
                             _this.switchType(ArtType.Random);
+                            _this.switch = true;
                             break;
                         case "ArrowLeft":
                             _this.switchType(ArtType.Favorited);
+                            _this.switch = false;
                             break;
                         case "f":
                         case "Enter":
@@ -336,6 +330,25 @@
             this.getNewArt();
             this.listenForInstructions();
         }
+        Main.prototype.randomSwitch = function () {
+            if (this.switch) {
+                var randomNum = Math.floor(Math.random() * 4);
+                switch (randomNum) {
+                    case 0:
+                        this.switchType(ArtType.Random);
+                        break;
+                    case 1:
+                        this.switchType(ArtType.Cached);
+                        break;
+                    case 2:
+                        this.switchType(ArtType.Favorited);
+                        break;
+                    case 3:
+                        this.switchType(ArtType.Videos);
+                        break;
+                }
+            }
+        };
         Main.prototype.switchType = function (type) {
             this.currentType = type;
             switch (type) {

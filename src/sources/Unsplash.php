@@ -38,7 +38,7 @@ class Unsplash extends Source
             $this->artData = new ArtCreateDTO(
                 title: ($this->rawData->description) ? $this->rawData->description : '',
                 category: $this->flattenTags($this->rawData->tags),
-                description: $this->rawData->alt_description,
+                description: $this->rawData->alt_description || '',
                 artist: $this->rawData->user->name,
                 url: $this->rawData->urls->full,
                 source: self::$sourceName,
