@@ -40,7 +40,6 @@ class Main {
           switch (message.message) {
             case "next":
               this.randomSwitch();
-              this.getNewArt(true);
               break;
             case "delete":
               this.deleteArt();
@@ -126,7 +125,6 @@ class Main {
           break;
         case "ArrowRight":
           this.randomSwitch();
-          this.getNewArt(true);
           break;
         case "ArrowUp":
           this.switchType(ArtType.Cached);

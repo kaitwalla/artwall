@@ -185,7 +185,6 @@
                             switch (message.message) {
                                 case "next":
                                     _this.randomSwitch();
-                                    _this.getNewArt(true);
                                     break;
                                 case "delete":
                                     _this.deleteArt();
@@ -269,7 +268,6 @@
                             break;
                         case "ArrowRight":
                             _this.randomSwitch();
-                            _this.getNewArt(true);
                             break;
                         case "ArrowUp":
                             _this.switchType(ArtType.Cached);
