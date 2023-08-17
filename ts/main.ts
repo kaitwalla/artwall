@@ -193,9 +193,9 @@ class Main {
     const video = DomElement.create(
       `video[autoplay=true][loop=true][muted=true][src="/videos/${videoResponse.video}"]`
     );
+    container.append(mat);
     container.append(video);
     frame.append(container);
-    frame.append(mat);
     document.body.append(frame);
     setTimeout(() => frame.classList.add("fade-in"), 2000);
   };

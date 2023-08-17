@@ -312,9 +312,9 @@
                 var mat = DomElement.create("div.mat");
                 var container = DomElement.create("div.container");
                 var video = DomElement.create("video[autoplay=true][loop=true][muted=true][src=\"/videos/".concat(videoResponse.video, "\"]"));
+                container.append(mat);
                 container.append(video);
                 frame.append(container);
-                frame.append(mat);
                 document.body.append(frame);
                 setTimeout(function () { return frame.classList.add("fade-in"); }, 2000);
             };
