@@ -83,10 +83,24 @@ class Main {
     if (this.interval) {
       clearInterval(this.interval);
     }
-    const time = this.currentType === ArtType.Videos ? 1000000 : 500000;
     this.interval = setInterval(() => {
-      this.getNewArt();
-    }, time);
+      // get a random value from the ArtType enum
+      const randomNum = Math.floor(Math.random() * 4);
+      switch (randomNum) {
+        case 0:
+          this.switchType(ArtType.Random);
+          break;
+        case 1:
+          this.switchType(ArtType.Cached);
+          break;
+        case 2:
+          this.switchType(ArtType.Favorited);
+          break;
+        case 3:
+          this.switchType(ArtType.Videos);
+          break;
+      }
+    }, 750000);
   };
 
   getNewArt = (notify = false) => {

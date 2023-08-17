@@ -228,10 +228,24 @@
                 if (_this.interval) {
                     clearInterval(_this.interval);
                 }
-                var time = _this.currentType === ArtType.Videos ? 1000000 : 500000;
                 _this.interval = setInterval(function () {
-                    _this.getNewArt();
-                }, time);
+                    // get a random value from the ArtType enum
+                    var randomNum = Math.floor(Math.random() * 4);
+                    switch (randomNum) {
+                        case 0:
+                            _this.switchType(ArtType.Random);
+                            break;
+                        case 1:
+                            _this.switchType(ArtType.Cached);
+                            break;
+                        case 2:
+                            _this.switchType(ArtType.Favorited);
+                            break;
+                        case 3:
+                            _this.switchType(ArtType.Videos);
+                            break;
+                    }
+                }, 750000);
             };
             this.getNewArt = function (notify) {
                 if (notify === void 0) { notify = false; }
