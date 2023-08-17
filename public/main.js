@@ -220,7 +220,7 @@
             this.deleteArt = function () {
                 if (_this.currentType !== ArtType.Videos) {
                     Api.deleteArt(_this.currentArt.id);
-                    _this.getNewArt(true);
+                    _this.randomSwitch();
                 }
             };
             this.notify = function (type) {
@@ -234,7 +234,6 @@
                 }
                 _this.interval = setInterval(function () {
                     _this.randomSwitch();
-                    _this.getNewArt();
                 }, 750000);
             };
             this.getNewArt = function (notify) {
@@ -337,6 +336,7 @@
         }
         Main.prototype.randomSwitch = function () {
             if (this.switch) {
+                this.setInterval();
                 var randomNum = Math.floor(Math.random() * 4) + 1;
                 switch (randomNum) {
                     case 1:

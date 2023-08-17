@@ -76,7 +76,7 @@ class Main {
   deleteArt = () => {
     if (this.currentType !== ArtType.Videos) {
       Api.deleteArt(this.currentArt.id);
-      this.getNewArt(true);
+      this.randomSwitch();
     }
   };
 
@@ -92,7 +92,6 @@ class Main {
     }
     this.interval = setInterval(() => {
       this.randomSwitch();
-      this.getNewArt();
     }, 750000);
   };
 
@@ -151,6 +150,7 @@ class Main {
 
   randomSwitch() {
     if (this.switch) {
+      this.setInterval();
       const randomNum = Math.floor(Math.random() * 4) + 1;
       switch (randomNum) {
         case 1:
