@@ -220,7 +220,7 @@
                 });
             };
             this.deleteArt = function () {
-                if (_this.currentType === ArtType.Videos) {
+                if (_this.currentType !== ArtType.Videos) {
                     Api.deleteArt(_this.currentArt.id);
                     _this.getNewArt(true);
                 }
@@ -322,7 +322,8 @@
                 var frame = DomElement.create("div.frame.video");
                 var mat = DomElement.create("div.mat");
                 var container = DomElement.create("div.container");
-                var video = DomElement.create("video[autoplay=true][loop=true][muted=true][src=\"/videos/".concat(videoResponse.video, "\"]"));
+                var video = DomElement.create("video[autoplay=true][loop=true][muted][src=\"/videos/".concat(videoResponse.video, "\"]"));
+                video.muted = true;
                 container.append(mat);
                 container.append(video);
                 frame.append(container);
@@ -336,7 +337,6 @@
         Main.prototype.randomSwitch = function () {
             if (this.switch) {
                 var randomNum = Math.floor(Math.random() * 4) + 1;
-                console.log('number', randomNum);
                 switch (randomNum) {
                     case 1:
                         this.switchType(ArtType.Random);
@@ -369,7 +369,7 @@
                     this.notify(NotificationType.VIDEOS);
                     break;
             }
-            //this.getNewArt();
+            this.getNewArt();
         };
         return Main;
     }());
