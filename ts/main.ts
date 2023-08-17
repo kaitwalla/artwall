@@ -198,10 +198,13 @@ class Main {
   };
 
   hideCurrentArt = () => {
-    const artOnPage = document.querySelector(".frame");
-    setTimeout(() => {
-      artOnPage?.remove();
-    }, 4000);
+    let artOnPage = document.querySelector(".frame");
+    if (artOnPage) {
+      setTimeout(() => {
+        artOnPage?.remove();
+        artOnPage = null;
+      }, 4000);
+    }
   };
 
   renderArt = () => {

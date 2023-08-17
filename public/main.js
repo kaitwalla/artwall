@@ -303,9 +303,12 @@
             };
             this.hideCurrentArt = function () {
                 var artOnPage = document.querySelector(".frame");
-                setTimeout(function () {
-                    artOnPage === null || artOnPage === void 0 ? void 0 : artOnPage.remove();
-                }, 4000);
+                if (artOnPage) {
+                    setTimeout(function () {
+                        artOnPage === null || artOnPage === void 0 ? void 0 : artOnPage.remove();
+                        artOnPage = null;
+                    }, 4000);
+                }
             };
             this.renderArt = function () {
                 _this.hideCurrentArt();
