@@ -27,7 +27,7 @@ class Database
     public static function loadRandomArt()
     {
         $db = new self();
-        $stmt = $db->db->prepare('SELECT * FROM art ORDER BY RANDOM() LIMIT 1');
+        $stmt = $db->db->prepare('SELECT * FROM art WHERE disliked is false ORDER BY RANDOM() LIMIT 1');
         $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
@@ -35,17 +35,17 @@ class Database
     public static function loadRandomFavoriteArt()
     {
         $db = new self();
-        $stmt = $db->db->prepare('SELECT * FROM art WHERE favorited IS true ORDER BY RANDOM() LIMIT 1');
+        $stmt = $db->db->prepare('SELECT * FROM art WHERE favorited IS true AND disliked is false ORDER BY RANDOM() LIMIT 1');
         $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     public static function deleteArt(int $id)
     {
-        $db = new self();
-        $stmt = $db->db->prepare('DELETE FROM art WHERE id = :id');
-        $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
-        return $stmt->execute();
+        return self::updateArt(new ArtPropertiesDTO(
+            id: $id,
+            disliked: true
+        ));
     }
 
     public static function createArt(ArtCreateDTO $createDTO)
