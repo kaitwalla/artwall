@@ -6,7 +6,7 @@
         }
         env.GOTIFY_SERVER_URL = "push.wudge.pengin";
         // Live server
-        env.GOTIFY_TOKEN = "AVEuQn2hbDMXx7p";
+        env.GOTIFY_TOKEN = "CRg_6uYafayGTr_";
         return env;
     }());
 
