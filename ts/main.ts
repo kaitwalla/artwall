@@ -226,7 +226,7 @@ class Main {
     const mat = DomElement.create("div.mat");
     const container = DomElement.create("div.container");
     const video = DomElement.create(
-      `video[autoplay=true][loop=true][muted][src="/videos/${videoResponse.video}"]`
+      `video[autoplay=true][loop][playsinline][muted][src="/videos/${videoResponse.video}"]`
     ) as HTMLVideoElement;
     video.muted = true;
     container.append(mat);

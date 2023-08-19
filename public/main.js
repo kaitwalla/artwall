@@ -320,7 +320,7 @@
                 var frame = DomElement.create("div.frame.video");
                 var mat = DomElement.create("div.mat");
                 var container = DomElement.create("div.container");
-                var video = DomElement.create("video[autoplay=true][loop=true][muted][src=\"/videos/".concat(videoResponse.video, "\"]"));
+                var video = DomElement.create("video[autoplay=true][loop][playsinline][muted][src=\"/videos/".concat(videoResponse.video, "\"]"));
                 video.muted = true;
                 container.append(mat);
                 container.append(video);
