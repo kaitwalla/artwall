@@ -351,6 +351,9 @@
                         break;
                 }
             }
+            else {
+                this.getNewArt();
+            }
         };
         Main.prototype.switchType = function (type) {
             this.currentType = type;

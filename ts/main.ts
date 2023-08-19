@@ -164,6 +164,8 @@ class Main {
           this.switchType(ArtType.Videos);
           break;
       }
+    } else {
+      this.getNewArt();
     }
   }
 
