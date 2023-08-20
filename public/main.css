@@ -116,18 +116,10 @@ body {
   overflow: hidden;
 }
 .frame.video video {
-  animation: video 60s ease-in-out infinite alternate;
+  left: -20%;
   height: 90vh;
 }
 
-@keyframes video {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-100% + 100vh));
-  }
-}
 @keyframes frameColor {
   0%, 49.9% {
     background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(221, 221, 255) 44%, rgb(238, 238, 255) 88%);
