@@ -8,6 +8,7 @@
 
 body {
   animation: frameColor 1860s linear infinite alternate;
+  overflow: hidden;
 }
 
 #background {
@@ -78,13 +79,16 @@ body {
 .frame {
   z-index: 5;
   position: fixed;
-  left: 5vw;
-  top: 5vh;
-  opacity: 0;
-  background-size: contain;
+  padding: 5vh 5vw;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 50vh;
+  opacity: 1;
+  background: white;
   display: block;
-  background-position: center;
-  background-repeat: no-repeat;
+  animation: frame 1860s linear infinite alternate;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.45);
 }
 .frame.fade-in {
   opacity: 1;
@@ -96,14 +100,16 @@ body {
 }
 .frame .art {
   width: 90vw;
-  height: 90vh;
+  height: 40vh;
   display: block;
   background-size: cover;
 }
 .frame .mat {
   z-index: 2;
-  width: 100%;
-  height: 100%;
+  width: 90vw;
+  height: 40vh;
+  left: 5vw;
+  top: 5vh;
   display: block;
   position: absolute;
   box-shadow: inset 0px 0px 11px 0px rgba(0, 0, 0, 0.45);
@@ -111,13 +117,13 @@ body {
 .frame.video .container {
   position: fixed;
   width: 90vw;
-  height: 90vh;
+  height: 40vh;
   z-index: -1;
   overflow: hidden;
 }
 .frame.video video {
   left: -20%;
-  height: 90vh;
+  height: 40vh;
 }
 
 @keyframes frameColor {
@@ -163,5 +169,58 @@ body {
     right: 80%;
     top: 50%;
     transform: scale(1);
+  }
+}
+.tray {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background-image: url(assets/desk2.jpg);
+  background-size: cover;
+  height: 50vh;
+  z-index: 0;
+}
+.tray iframe {
+  position: absolute;
+  z-index: 2;
+}
+.tray .news {
+  width: 900px;
+  height: 900px;
+  left: 415px;
+  top: -2vh;
+  transform: rotate(2deg);
+  z-index: 1;
+}
+.tray .plex {
+  width: 640px;
+  height: 800px;
+  left: 10px;
+  transform: rotate(-3deg);
+  top: 5vh;
+}
+
+.tray.bottom {
+  top: 50%;
+  background-image: url(assets/desk2.jpg);
+}
+.tray.bottom .plex {
+  left: 600px;
+  transform: rotate(3deg);
+  top: 0vh;
+}
+.tray.bottom .news {
+  width: 527px;
+  left: 150px;
+  top: 4vh;
+  transform: rotate(-2deg);
+}
+
+@keyframes frame {
+  0%, 45% {
+    top: 0;
+  }
+  55%, 100% {
+    top: 50vh;
   }
 }

@@ -18,7 +18,7 @@ interface VideoApiResponse {
 
 class Main {
   currentArt: Art;
-  currentType: ArtType = ArtType.Videos;
+  currentType: ArtType = ArtType.Random;
   interval: NodeJS.Timer;
   switch = true;
 
@@ -30,7 +30,7 @@ class Main {
 
   connectToSocket = () => {
     const socket = new WebSocket(
-      `wss://${env.GOTIFY_SERVER_URL}/stream?token=C8Xi7C5QAOEyKLW`
+      `wss://${env.GOTIFY_SERVER_URL}/stream?token=C8Xi7C5QAOEyKLW`,
     );
 
     socket.addEventListener("message", (event: MessageEvent<any>) => {
@@ -149,7 +149,7 @@ class Main {
   randomSwitch() {
     if (this.switch) {
       this.setInterval();
-      const randomNum = Math.floor(Math.random() * 4) + 1;
+      const randomNum = Math.floor(Math.random() * 3) + 1;
       switch (randomNum) {
         case 1:
           this.switchType(ArtType.Random);
@@ -212,7 +212,7 @@ class Main {
     const frame = DomElement.create("div.frame");
     const mat = DomElement.create("div.mat");
     const art = DomElement.create(
-      `img.art[style="background-image:url(/images/${this.currentArt.id}.jpg);"]`
+      `img.art[style="background-image:url(/images/${this.currentArt.id}.jpg);"]`,
     );
     frame.append(mat);
     frame.append(art);
@@ -226,7 +226,7 @@ class Main {
     const mat = DomElement.create("div.mat");
     const container = DomElement.create("div.container");
     const video = DomElement.create(
-      `video[autoplay=true][loop][playsinline][muted][src="/videos/${videoResponse.video}"]`
+      `video[autoplay=true][loop][playsinline][muted][src="/videos/${videoResponse.video}"]`,
     ) as HTMLVideoElement;
     video.muted = true;
     container.append(mat);

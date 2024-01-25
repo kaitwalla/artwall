@@ -13,7 +13,7 @@ class SourceFactory
         $randomNumber = ($getFromAPIRandom) ? rand(1, 3) : 3;
         switch ($randomNumber) {
             case 1:
-                $data = json_decode(file_get_contents('https://pixabay.com/api?editors_choice=true&order=latest&orientation=vertical&per_page=20&min_height=1200&key=' . $_ENV['pixaBayKey']));
+                $data = json_decode(file_get_contents('https://pixabay.com/api?editors_choice=true&order=latest&orientation=horizontal&per_page=20&min_height=1200&key=' . $_ENV['pixaBayKey']));
                 $additions = [];
                 foreach ($data->hits as $item) {
                     if (!Database::sourceIdExists(Pixabay::$sourceName, $item->id)) {
@@ -27,10 +27,8 @@ class SourceFactory
                 } else {
                     return self::getNewArt(true);
                 }
-                break;
             case 2:
                 return Unsplash::createNewArt();
-                break;
             case 3:
                 $opts = [
                     "http" => [
@@ -40,7 +38,7 @@ class SourceFactory
                 ];
                 $additions = [];
                 $context = stream_context_create($opts);
-                $data = json_decode(file_get_contents('https://api.pexels.com/v1/curated?orientation=portrait', false, $context));
+                $data = json_decode(file_get_contents('https://api.pexels.com/v1/curated?orientation=horizontal', false, $context));
                 foreach ($data->photos as $item) {
                     if ($item->width > $item->height) {
                         continue;
@@ -56,7 +54,6 @@ class SourceFactory
                 } else {
                     return self::getNewArt(true);
                 }
-                break;
         }
     }
 }

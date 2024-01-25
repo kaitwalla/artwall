@@ -20,7 +20,7 @@ class Unsplash extends Source
 
     public function getRawData(): void
     {
-        $this->rawData = json_decode(file_get_contents('https://api.unsplash.com/photos/random?topics=' . implode(',', self::$topicIds) . '&orientation=portrait&client_id=' . $_ENV['unsplashApiKey']));
+        $this->rawData = json_decode(file_get_contents('https://api.unsplash.com/photos/random?topics=' . implode(',', self::$topicIds) . '&orientation=landscape&client_id=' . $_ENV['unsplashApiKey']));
     }
 
     protected function flattenTags(array $tags)

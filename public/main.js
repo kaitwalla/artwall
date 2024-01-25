@@ -174,7 +174,7 @@
     var Main = /** @class */ (function () {
         function Main() {
             var _this = this;
-            this.currentType = ArtType.Videos;
+            this.currentType = ArtType.Random;
             this.switch = true;
             this.connectToSocket = function () {
                 var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=C8Xi7C5QAOEyKLW"));
@@ -335,7 +335,7 @@
         Main.prototype.randomSwitch = function () {
             if (this.switch) {
                 this.setInterval();
-                var randomNum = Math.floor(Math.random() * 4) + 1;
+                var randomNum = Math.floor(Math.random() * 3) + 1;
                 switch (randomNum) {
                     case 1:
                         this.switchType(ArtType.Random);
