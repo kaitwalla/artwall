@@ -76,64 +76,83 @@ body {
     transform: scale(0);
   }
 }
-.frame {
+#container {
   z-index: 5;
   position: fixed;
-  padding: 5vh 5vw;
+  padding: 3vh 5vw;
   left: 0;
-  top: 0;
+  top: 0px;
   width: 100vw;
-  height: 50vh;
-  opacity: 1;
+  height: 53vh;
   background: white;
+  transform: translateY(0vh);
   display: block;
-  animation: frame 1860s linear infinite alternate;
+  transition: all 2.5s;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.45);
 }
-.frame.fade-in {
-  opacity: 1;
-  transition: opacity 2.5s;
+#container.bottom {
+  transform: translateY(50vh);
+  transition: all 2.5s;
+  height: 50vh;
 }
-.frame.fade-out {
-  opacity: 0;
-  transition: opacity 2.5s;
+#container.bottom #mat {
+  height: 43vh;
 }
-.frame .art {
-  width: 90vw;
-  height: 40vh;
-  display: block;
-  background-size: cover;
+#container.bottom .frame .art {
+  height: 43vh;
 }
-.frame .mat {
+#container.bottom .frame.video .container,
+#container.bottom .frame.video video {
+  height: 43vh;
+}
+#container.dark {
+  background: #333;
+}
+#container #mat {
   z-index: 2;
   width: 90vw;
-  height: 40vh;
+  height: 47vh;
   left: 5vw;
-  top: 5vh;
+  top: 3vh;
+  transition: all 2.5s;
   display: block;
   position: absolute;
   box-shadow: inset 0px 0px 11px 0px rgba(0, 0, 0, 0.45);
 }
-.frame.video .container {
+#container .frame {
+  opacity: 0;
+  display: block;
+  position: absolute;
+}
+#container .frame.fade-in {
+  opacity: 1;
+  transition: all 2.5s;
+}
+#container .frame.fade-out {
+  opacity: 0;
+  transition: all 2.5s;
+}
+#container .frame .art {
+  width: 90vw;
+  height: 47vh;
+  transition: all 2.5s;
+  display: block;
+  background-size: cover;
+}
+#container .frame.video .container {
   position: fixed;
   width: 90vw;
-  height: 40vh;
+  height: 47vh;
+  transition: all 2.5s;
   z-index: -1;
   overflow: hidden;
 }
-.frame.video video {
+#container .frame.video video {
   left: -20%;
-  height: 40vh;
+  transition: all 2.5s;
+  height: 47vh;
 }
 
-@keyframes frameColor {
-  0%, 49.9% {
-    background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(221, 221, 255) 44%, rgb(238, 238, 255) 88%);
-  }
-  50.1%, 100% {
-    background: #000;
-  }
-}
 .heart {
   content: "❤️";
   position: fixed;
@@ -186,7 +205,7 @@ body {
 }
 .tray .news {
   width: 900px;
-  height: 900px;
+  height: 975px;
   left: 415px;
   top: -2vh;
   transform: rotate(2deg);
@@ -194,33 +213,25 @@ body {
 }
 .tray .plex {
   width: 640px;
-  height: 800px;
+  height: 907px;
   left: 10px;
   transform: rotate(-3deg);
   top: 5vh;
 }
-
 .tray.bottom {
   top: 50%;
-  background-image: url(assets/desk2.jpg);
+  background-image: url(assets/desk1.jpg);
 }
 .tray.bottom .plex {
-  left: 600px;
-  transform: rotate(3deg);
-  top: 0vh;
+  left: 530px;
+  transform: rotate(4deg);
+  top: 3.5vh;
+  height: 800px;
 }
 .tray.bottom .news {
+  height: 900px;
   width: 527px;
-  left: 150px;
-  top: 4vh;
+  left: 70px;
+  top: 5.5vh;
   transform: rotate(-2deg);
-}
-
-@keyframes frame {
-  0%, 45% {
-    top: 0;
-  }
-  55%, 100% {
-    top: 50vh;
-  }
 }

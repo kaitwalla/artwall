@@ -18,11 +18,13 @@ interface VideoApiResponse {
 
 class Main {
   currentArt: Art;
-  currentType: ArtType = ArtType.Random;
-  interval: NodeJS.Timer;
+  currentType: ArtType = ArtType.Videos;
+  interval: ReturnType<typeof setInterval>;
   switch = true;
+  container: HTMLDivElement;
 
   constructor() {
+    this.container = document.getElementById("container") as HTMLDivElement;
     this.setInterval();
     this.getNewArt();
     this.listenForInstructions();
@@ -30,14 +32,33 @@ class Main {
 
   connectToSocket = () => {
     const socket = new WebSocket(
-      `wss://${env.GOTIFY_SERVER_URL}/stream?token=C8Xi7C5QAOEyKLW`,
+      `wss://${env.GOTIFY_SERVER_URL}/stream?token=C0dIp0lshKSoMtv`,
     );
 
     socket.addEventListener("message", (event: MessageEvent<any>) => {
       if (event) {
         const message = JSON.parse(event.data);
+        if (message.appid === 2) {
+          setTimeout(() => {
+            const plexDiv = document.querySelectorAll(".plex");
+            if (plexDiv.length > 0) {
+              for (const iframe of Array.from(plexDiv)) {
+                iframe.setAttribute(
+                  "src",
+                  iframe.getAttribute("src") as string,
+                );
+              }
+            }
+          }, 500);
+        }
         if (message.title === "client:command") {
           switch (message.message) {
+            case "paint":
+              this.paintFrame();
+              break;
+            case "move":
+              this.moveFrame();
+              break;
             case "next":
               this.randomSwitch();
               break;
@@ -79,9 +100,17 @@ class Main {
     }
   };
 
+  paintFrame = () => {
+    document.getElementById("container")?.classList.toggle("darkdd");
+  };
+
+  moveFrame = () => {
+    document.getElementById("container")?.classList.toggle("bottom");
+  };
+
   notify = (type: NotificationType) => {
     const notification = DomElement.create(`div.notification.${type}`);
-    document.body.append(notification);
+    this.container.append(notification);
     setTimeout(() => notification.remove(), 3200);
   };
 
@@ -91,6 +120,13 @@ class Main {
     }
     this.interval = setInterval(() => {
       this.randomSwitch();
+      const randomNum = Math.floor(Math.random() * 10) + 1;
+      if (randomNum % 2 == 0) {
+        this.moveFrame();
+      }
+      if (randomNum % 3 == 0) {
+        this.paintFrame();
+      }
     }, 750000);
   };
 
@@ -198,41 +234,36 @@ class Main {
   };
 
   hideCurrentArt = () => {
-    let artOnPage = document.querySelector(".frame");
+    const artOnPage = document.querySelector(".frame");
     if (artOnPage) {
       setTimeout(() => {
-        artOnPage?.remove();
-        artOnPage = null;
-      }, 4000);
+        (artOnPage as HTMLDivElement).remove();
+      }, 6000);
     }
   };
 
   renderArt = () => {
     this.hideCurrentArt();
     const frame = DomElement.create("div.frame");
-    const mat = DomElement.create("div.mat");
     const art = DomElement.create(
       `img.art[style="background-image:url(/images/${this.currentArt.id}.jpg);"]`,
     );
-    frame.append(mat);
     frame.append(art);
-    document.body.append(frame);
-    setTimeout(() => frame.classList.add("fade-in"), 2000);
+    this.container.append(frame);
+    setTimeout(() => frame.classList.add("fade-in"), 3000);
   };
 
   renderVideo = (videoResponse: VideoApiResponse) => {
     this.hideCurrentArt();
     const frame = DomElement.create("div.frame.video");
-    const mat = DomElement.create("div.mat");
     const container = DomElement.create("div.container");
     const video = DomElement.create(
       `video[autoplay=true][loop][playsinline][muted][src="/videos/${videoResponse.video}"]`,
     ) as HTMLVideoElement;
     video.muted = true;
-    container.append(mat);
     container.append(video);
     frame.append(container);
-    document.body.append(frame);
+    this.container.append(frame);
     setTimeout(() => frame.classList.add("fade-in"), 2000);
   };
 }

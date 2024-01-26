@@ -174,15 +174,32 @@
     var Main = /** @class */ (function () {
         function Main() {
             var _this = this;
-            this.currentType = ArtType.Random;
+            this.currentType = ArtType.Videos;
             this.switch = true;
             this.connectToSocket = function () {
-                var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=C8Xi7C5QAOEyKLW"));
+                var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=C0dIp0lshKSoMtv"));
                 socket.addEventListener("message", function (event) {
                     if (event) {
                         var message = JSON.parse(event.data);
+                        if (message.appid === 2) {
+                            setTimeout(function () {
+                                var plexDiv = document.querySelectorAll(".plex");
+                                if (plexDiv.length > 0) {
+                                    for (var _i = 0, _a = Array.from(plexDiv); _i < _a.length; _i++) {
+                                        var iframe = _a[_i];
+                                        iframe.setAttribute("src", iframe.getAttribute("src"));
+                                    }
+                                }
+                            }, 500);
+                        }
                         if (message.title === "client:command") {
                             switch (message.message) {
+                                case "paint":
+                                    _this.paintFrame();
+                                    break;
+                                case "move":
+                                    _this.moveFrame();
+                                    break;
                                 case "next":
                                     _this.randomSwitch();
                                     break;
@@ -222,9 +239,17 @@
                     _this.randomSwitch();
                 }
             };
+            this.paintFrame = function () {
+                var _a;
+                (_a = document.getElementById("container")) === null || _a === void 0 ? void 0 : _a.classList.toggle("darkdd");
+            };
+            this.moveFrame = function () {
+                var _a;
+                (_a = document.getElementById("container")) === null || _a === void 0 ? void 0 : _a.classList.toggle("bottom");
+            };
             this.notify = function (type) {
                 var notification = DomElement.create("div.notification.".concat(type));
-                document.body.append(notification);
+                _this.container.append(notification);
                 setTimeout(function () { return notification.remove(); }, 3200);
             };
             this.setInterval = function () {
@@ -233,6 +258,13 @@
                 }
                 _this.interval = setInterval(function () {
                     _this.randomSwitch();
+                    var randomNum = Math.floor(Math.random() * 10) + 1;
+                    if (randomNum % 2 == 0) {
+                        _this.moveFrame();
+                    }
+                    if (randomNum % 3 == 0) {
+                        _this.paintFrame();
+                    }
                 }, 750000);
             };
             this.getNewArt = function (notify) {
@@ -300,34 +332,30 @@
                 var artOnPage = document.querySelector(".frame");
                 if (artOnPage) {
                     setTimeout(function () {
-                        artOnPage === null || artOnPage === void 0 ? void 0 : artOnPage.remove();
-                        artOnPage = null;
-                    }, 4000);
+                        artOnPage.remove();
+                    }, 6000);
                 }
             };
             this.renderArt = function () {
                 _this.hideCurrentArt();
                 var frame = DomElement.create("div.frame");
-                var mat = DomElement.create("div.mat");
                 var art = DomElement.create("img.art[style=\"background-image:url(/images/".concat(_this.currentArt.id, ".jpg);\"]"));
-                frame.append(mat);
                 frame.append(art);
-                document.body.append(frame);
-                setTimeout(function () { return frame.classList.add("fade-in"); }, 2000);
+                _this.container.append(frame);
+                setTimeout(function () { return frame.classList.add("fade-in"); }, 3000);
             };
             this.renderVideo = function (videoResponse) {
                 _this.hideCurrentArt();
                 var frame = DomElement.create("div.frame.video");
-                var mat = DomElement.create("div.mat");
                 var container = DomElement.create("div.container");
                 var video = DomElement.create("video[autoplay=true][loop][playsinline][muted][src=\"/videos/".concat(videoResponse.video, "\"]"));
                 video.muted = true;
-                container.append(mat);
                 container.append(video);
                 frame.append(container);
-                document.body.append(frame);
+                _this.container.append(frame);
                 setTimeout(function () { return frame.classList.add("fade-in"); }, 2000);
             };
+            this.container = document.getElementById("container");
             this.setInterval();
             this.getNewArt();
             this.listenForInstructions();
