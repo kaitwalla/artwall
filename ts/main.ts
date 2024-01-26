@@ -101,7 +101,7 @@ class Main {
   };
 
   paintFrame = () => {
-    document.getElementById("container")?.classList.toggle("darkdd");
+    document.getElementById("container")?.classList.toggle("dark");
   };
 
   moveFrame = () => {

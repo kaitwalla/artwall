@@ -241,7 +241,7 @@
             };
             this.paintFrame = function () {
                 var _a;
-                (_a = document.getElementById("container")) === null || _a === void 0 ? void 0 : _a.classList.toggle("darkdd");
+                (_a = document.getElementById("container")) === null || _a === void 0 ? void 0 : _a.classList.toggle("dark");
             };
             this.moveFrame = function () {
                 var _a;
