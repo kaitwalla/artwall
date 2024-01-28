@@ -4,7 +4,7 @@
     var env = /** @class */ (function () {
         function env() {
         }
-        env.GOTIFY_SERVER_URL = "push.wudge.pengin";
+        env.GOTIFY_SERVER_URL = "push.penginlab.com";
         // Live server
         env.GOTIFY_TOKEN = "CRg_6uYafayGTr_";
         return env;
@@ -241,7 +241,7 @@
             };
             this.paintFrame = function () {
                 var _a;
-                (_a = document.getElementById("container")) === null || _a === void 0 ? void 0 : _a.classList.toggle("dark");
+                (_a = document.getElementById("container")) === null || _a === void 0 ? void 0 : _a.classList.toggle("dark`");
             };
             this.moveFrame = function () {
                 var _a;
