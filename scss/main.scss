@@ -212,17 +212,17 @@ body {
   .news {
     width: 900px;
     height: 975px;
-    left: 415px;
-    top: -2vh;
-    transform: rotate(2deg);
+    left: 445px;
+    top: 7vh;
+    transform: rotate(3deg);
     z-index: 1;
   }
   .plex {
     width: 640px;
     height: 907px;
-    left: 10px;
+    left: 0;
     transform: rotate(-3deg);
-    top: 5vh;
+    top: 2vh;
   }
   &.bottom {
     top: 50%;
@@ -235,7 +235,7 @@ body {
     }
     .news {
       height: 900px;
-      width: 527px;
+      width: 570px;
       left: 70px;
       top: 5.5vh;
       transform: rotate(-2deg);
