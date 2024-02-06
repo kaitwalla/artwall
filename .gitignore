@@ -5,3 +5,4 @@ data/artwalla.db
 /vendor/
 env.ts
 public/videos
+public/videos-avi/*.mov
