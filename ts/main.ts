@@ -21,10 +21,12 @@ class Main {
   currentType: ArtType = ArtType.Videos;
   interval: ReturnType<typeof setInterval>;
   switch = true;
+  offline: HTMLImageElement;
   container: HTMLDivElement;
 
   constructor() {
     this.container = document.getElementById("container") as HTMLDivElement;
+    this.offline = document.getElementById("offline") as HTMLImageElement;
     this.setInterval();
     this.getNewArt();
     this.listenForInstructions();
@@ -35,65 +37,79 @@ class Main {
       `wss://${env.GOTIFY_SERVER_URL}/stream?token=${env.GOTIFY_TOKEN}`,
     );
 
-    socket.addEventListener("message", (event: MessageEvent<any>) => {
-      if (event) {
-        const message = JSON.parse(event.data);
-        if (message.appid === 2) {
-          setTimeout(() => {
-            const plexDiv = document.querySelectorAll(".plex");
-            if (plexDiv.length > 0) {
-              for (const iframe of Array.from(plexDiv)) {
-                iframe.setAttribute(
-                  "src",
-                  iframe.getAttribute("src") as string,
-                );
+    socket.onclose = (error: Event) => {
+      this.offline.style.display = "block";
+      setTimeout(() => {
+        this.connectToSocket();
+      }, 15000);
+    };
+
+    socket.onerror = (error: Event) => {
+      socket.close();
+    };
+
+    socket.onopen = () => {
+      this.offline.style.display = "none";
+      socket.addEventListener("message", (event: MessageEvent<any>) => {
+        if (event) {
+          const message = JSON.parse(event.data);
+          if (message.appid === 2) {
+            setTimeout(() => {
+              const plexDiv = document.querySelectorAll(".plex");
+              if (plexDiv.length > 0) {
+                for (const iframe of Array.from(plexDiv)) {
+                  iframe.setAttribute(
+                    "src",
+                    iframe.getAttribute("src") as string,
+                  );
+                }
               }
+            }, 500);
+          }
+          if (message.title === "client:command") {
+            switch (message.message) {
+              case "refresh-status":
+                setTimeout(this.refreshStatus, 1000);
+                break;
+              case "paint":
+                this.paintFrame();
+                break;
+              case "move":
+                this.moveFrame();
+                break;
+              case "next":
+                this.randomSwitch();
+                break;
+              case "delete":
+                this.deleteArt();
+                break;
+              case "favorite":
+                this.favoriteArt();
+                break;
+              case "type-random":
+                this.switchType(ArtType.Random);
+                this.switch = true;
+                break;
+              case "type-cached":
+                this.switchType(ArtType.Cached);
+                this.switch = false;
+                break;
+              case "type-favorited":
+                this.switchType(ArtType.Favorited);
+                this.switch = false;
+                break;
+              case "type-videos":
+                this.switchType(ArtType.Videos);
+                this.switch = false;
+                break;
+              case "refresh":
+                window.location.reload();
+                break;
             }
-          }, 500);
-        }
-        if (message.title === "client:command") {
-          switch (message.message) {
-            case "refresh-status":
-              setTimeout(this.refreshStatus, 1000);
-              break;
-            case "paint":
-              this.paintFrame();
-              break;
-            case "move":
-              this.moveFrame();
-              break;
-            case "next":
-              this.randomSwitch();
-              break;
-            case "delete":
-              this.deleteArt();
-              break;
-            case "favorite":
-              this.favoriteArt();
-              break;
-            case "type-random":
-              this.switchType(ArtType.Random);
-              this.switch = true;
-              break;
-            case "type-cached":
-              this.switchType(ArtType.Cached);
-              this.switch = false;
-              break;
-            case "type-favorited":
-              this.switchType(ArtType.Favorited);
-              this.switch = false;
-              break;
-            case "type-videos":
-              this.switchType(ArtType.Videos);
-              this.switch = false;
-              break;
-            case "refresh":
-              window.location.reload();
-              break;
           }
         }
-      }
-    });
+      });
+    };
   };
 
   refreshStatus = () => {

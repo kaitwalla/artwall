@@ -243,3 +243,11 @@ body {
   top: 5.5vh;
   transform: rotate(-2deg);
 }
+
+#offline {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: 20px;
+  bottom: 20px;
+}

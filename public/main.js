@@ -6,7 +6,7 @@
         }
         env.GOTIFY_SERVER_URL = "push.penginlab.com";
         // Live server
-        env.GOTIFY_TOKEN = "CRg_6uYafayGTr_";
+        env.GOTIFY_TOKEN = "C0dIp0lshKSoMtv";
         return env;
     }());
 
@@ -177,64 +177,76 @@
             this.currentType = ArtType.Videos;
             this.switch = true;
             this.connectToSocket = function () {
-                var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=C0dIp0lshKSoMtv"));
-                socket.addEventListener("message", function (event) {
-                    if (event) {
-                        var message = JSON.parse(event.data);
-                        if (message.appid === 2) {
-                            setTimeout(function () {
-                                var plexDiv = document.querySelectorAll(".plex");
-                                if (plexDiv.length > 0) {
-                                    for (var _i = 0, _a = Array.from(plexDiv); _i < _a.length; _i++) {
-                                        var iframe = _a[_i];
-                                        iframe.setAttribute("src", iframe.getAttribute("src"));
+                var socket = new WebSocket("wss://".concat(env.GOTIFY_SERVER_URL, "/stream?token=").concat(env.GOTIFY_TOKEN));
+                socket.onclose = function (error) {
+                    _this.offline.style.display = "block";
+                    setTimeout(function () {
+                        _this.connectToSocket();
+                    }, 15000);
+                };
+                socket.onerror = function (error) {
+                    socket.close();
+                };
+                socket.onopen = function () {
+                    _this.offline.style.display = "none";
+                    socket.addEventListener("message", function (event) {
+                        if (event) {
+                            var message = JSON.parse(event.data);
+                            if (message.appid === 2) {
+                                setTimeout(function () {
+                                    var plexDiv = document.querySelectorAll(".plex");
+                                    if (plexDiv.length > 0) {
+                                        for (var _i = 0, _a = Array.from(plexDiv); _i < _a.length; _i++) {
+                                            var iframe = _a[_i];
+                                            iframe.setAttribute("src", iframe.getAttribute("src"));
+                                        }
                                     }
+                                }, 500);
+                            }
+                            if (message.title === "client:command") {
+                                switch (message.message) {
+                                    case "refresh-status":
+                                        setTimeout(_this.refreshStatus, 1000);
+                                        break;
+                                    case "paint":
+                                        _this.paintFrame();
+                                        break;
+                                    case "move":
+                                        _this.moveFrame();
+                                        break;
+                                    case "next":
+                                        _this.randomSwitch();
+                                        break;
+                                    case "delete":
+                                        _this.deleteArt();
+                                        break;
+                                    case "favorite":
+                                        _this.favoriteArt();
+                                        break;
+                                    case "type-random":
+                                        _this.switchType(ArtType.Random);
+                                        _this.switch = true;
+                                        break;
+                                    case "type-cached":
+                                        _this.switchType(ArtType.Cached);
+                                        _this.switch = false;
+                                        break;
+                                    case "type-favorited":
+                                        _this.switchType(ArtType.Favorited);
+                                        _this.switch = false;
+                                        break;
+                                    case "type-videos":
+                                        _this.switchType(ArtType.Videos);
+                                        _this.switch = false;
+                                        break;
+                                    case "refresh":
+                                        window.location.reload();
+                                        break;
                                 }
-                            }, 500);
-                        }
-                        if (message.title === "client:command") {
-                            switch (message.message) {
-                                case "refresh-status":
-                                    setTimeout(_this.refreshStatus, 1000);
-                                    break;
-                                case "paint":
-                                    _this.paintFrame();
-                                    break;
-                                case "move":
-                                    _this.moveFrame();
-                                    break;
-                                case "next":
-                                    _this.randomSwitch();
-                                    break;
-                                case "delete":
-                                    _this.deleteArt();
-                                    break;
-                                case "favorite":
-                                    _this.favoriteArt();
-                                    break;
-                                case "type-random":
-                                    _this.switchType(ArtType.Random);
-                                    _this.switch = true;
-                                    break;
-                                case "type-cached":
-                                    _this.switchType(ArtType.Cached);
-                                    _this.switch = false;
-                                    break;
-                                case "type-favorited":
-                                    _this.switchType(ArtType.Favorited);
-                                    _this.switch = false;
-                                    break;
-                                case "type-videos":
-                                    _this.switchType(ArtType.Videos);
-                                    _this.switch = false;
-                                    break;
-                                case "refresh":
-                                    window.location.reload();
-                                    break;
                             }
                         }
-                    }
-                });
+                    });
+                };
             };
             this.refreshStatus = function () {
                 var frame = document.getElementById("status");
@@ -366,6 +378,7 @@
                 setTimeout(function () { return frame.classList.add("fade-in"); }, 2000);
             };
             this.container = document.getElementById("container");
+            this.offline = document.getElementById("offline");
             this.setInterval();
             this.getNewArt();
             this.listenForInstructions();
