@@ -32,7 +32,7 @@ class Main {
 
   connectToSocket = () => {
     const socket = new WebSocket(
-      `wss://${env.GOTIFY_SERVER_URL}/stream?token=C0dIp0lshKSoMtv`,
+      `wss://${env.GOTIFY_SERVER_URL}/stream?token=${env.GOTIFY_TOKEN}`,
     );
 
     socket.addEventListener("message", (event: MessageEvent<any>) => {
