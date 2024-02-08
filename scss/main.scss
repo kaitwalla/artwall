@@ -89,6 +89,14 @@ body {
   display: block;
   transition: all 2.5s;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.45);
+  #status {
+    position: absolute;
+    left: -60px;
+    top: 5px;
+    height: 60px;
+    transform: scale(0.6);
+    width: 380px;
+  }
   &.bottom {
     transform: translateY(50vh);
     transition: all 2.5s;

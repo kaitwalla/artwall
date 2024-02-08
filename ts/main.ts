@@ -53,6 +53,9 @@ class Main {
         }
         if (message.title === "client:command") {
           switch (message.message) {
+            case "refresh-status":
+              setTimeout(this.refreshStatus, 1000);
+              break;
             case "paint":
               this.paintFrame();
               break;
@@ -93,6 +96,11 @@ class Main {
     });
   };
 
+  refreshStatus = () => {
+    const frame = document.getElementById("status") as HTMLIFrameElement;
+    frame.setAttribute("src", frame.getAttribute("src") as string);
+  };
+
   deleteArt = () => {
     if (this.currentType !== ArtType.Videos) {
       Api.deleteArt(this.currentArt.id);
@@ -115,6 +123,9 @@ class Main {
   };
 
   setInterval = () => {
+    setInterval(() => {
+      this.refreshStatus();
+    }, 300000);
     if (this.interval) {
       clearInterval(this.interval);
     }

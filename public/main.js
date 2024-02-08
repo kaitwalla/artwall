@@ -194,6 +194,9 @@
                         }
                         if (message.title === "client:command") {
                             switch (message.message) {
+                                case "refresh-status":
+                                    setTimeout(_this.refreshStatus, 1000);
+                                    break;
                                 case "paint":
                                     _this.paintFrame();
                                     break;
@@ -233,6 +236,10 @@
                     }
                 });
             };
+            this.refreshStatus = function () {
+                var frame = document.getElementById("status");
+                frame.setAttribute("src", frame.getAttribute("src"));
+            };
             this.deleteArt = function () {
                 if (_this.currentType !== ArtType.Videos) {
                     Api.deleteArt(_this.currentArt.id);
@@ -253,6 +260,9 @@
                 setTimeout(function () { return notification.remove(); }, 3200);
             };
             this.setInterval = function () {
+                setInterval(function () {
+                    _this.refreshStatus();
+                }, 300000);
                 if (_this.interval) {
                     clearInterval(_this.interval);
                 }

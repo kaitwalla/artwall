@@ -1,29 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artwalla</title>
+    <script src="main.js?update=4" defer></script>
+    <link rel="stylesheet" href="main.css?update=4" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artwalla</title>
-  <script src="main.js?update=4" defer></script>
-  <link rel="stylesheet" href="main.css?update=4" />
-</head>
-
-<body>
-  <div id="background"></div>
-  <div id="logo"></div>
-  <div class="tray">
-    <iframe class="news" scrolling="no"
-      src="https://toys.kait.dev/feeder/index.php?key=LinkPenginIsGreat&type=good"></iframe>
-    <iframe class="plex" scrolling="no" src="https://toys.kait.dev/plex/index.php?display=board&style=zune"></iframe>
-  </div>
-  <div class="tray bottom">
-    <iframe class="news" scrolling="no" src="https://toys.kait.dev/feeder/index.php?key=LinkPenginIsGreat"></iframe>
-    <iframe class="plex" scrolling="no" src="https://toys.kait.dev/plex/index.php?display=board"></iframe>
-  </div>
-  <div id="container">
-    <div id="mat"></div>
-  </div>
-</body>
-
+  <body>
+    <div id="background"></div>
+    <div id="logo"></div>
+    <div class="tray">
+      <iframe
+        class="news"
+        scrolling="no"
+        src="https://toys.kait.dev/feeder/index.php?key=LinkPenginIsGreat&type=good"></iframe>
+      <iframe
+        class="plex"
+        scrolling="no"
+        src="https://toys.kait.dev/plex/index.php?display=board&style=zune"></iframe>
+    </div>
+    <div class="tray bottom">
+      <iframe
+        class="news"
+        scrolling="no"
+        src="https://toys.kait.dev/feeder/index.php?key=LinkPenginIsGreat"></iframe>
+      <iframe
+        class="plex"
+        scrolling="no"
+        src="https://toys.kait.dev/plex/index.php?display=board"></iframe>
+    </div>
+    <div id="container">
+      <iframe id="status" src="https://toys.kait.dev/status/?display"></iframe>
+      <div id="mat"></div>
+    </div>
+  </body>
 </html>
