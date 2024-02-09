@@ -6,7 +6,7 @@
         }
         env.GOTIFY_SERVER_URL = "push.penginlab.com";
         // Live server
-        env.GOTIFY_TOKEN = "C0dIp0lshKSoMtv";
+        env.GOTIFY_TOKEN = "C.d7Xbkya8M_OC3";
         return env;
     }());
 
@@ -205,9 +205,6 @@
                             }
                             if (message.title === "client:command") {
                                 switch (message.message) {
-                                    case "refresh-status":
-                                        setTimeout(_this.refreshStatus, 1000);
-                                        break;
                                     case "paint":
                                         _this.paintFrame();
                                         break;
@@ -272,9 +269,6 @@
                 setTimeout(function () { return notification.remove(); }, 3200);
             };
             this.setInterval = function () {
-                setInterval(function () {
-                    _this.refreshStatus();
-                }, 300000);
                 if (_this.interval) {
                     clearInterval(_this.interval);
                 }

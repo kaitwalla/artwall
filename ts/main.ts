@@ -68,9 +68,6 @@ class Main {
           }
           if (message.title === "client:command") {
             switch (message.message) {
-              case "refresh-status":
-                setTimeout(this.refreshStatus, 1000);
-                break;
               case "paint":
                 this.paintFrame();
                 break;
@@ -139,9 +136,6 @@ class Main {
   };
 
   setInterval = () => {
-    setInterval(() => {
-      this.refreshStatus();
-    }, 300000);
     if (this.interval) {
       clearInterval(this.interval);
     }
